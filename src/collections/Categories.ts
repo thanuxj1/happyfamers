@@ -1,0 +1,28 @@
+import type { CollectionConfig } from 'payload'
+
+import { anyone } from '../access/anyone'
+import { authenticated } from '../access/authenticated'
+import { slugField } from '../fields/slug'
+
+export const Categories: CollectionConfig = {
+  slug: 'categories',
+  access: {
+    create: authenticated,
+    delete: authenticated,
+    read: anyone,
+    update: authenticated,
+  },
+  admin: {
+    useAsTitle: 'title',
+    group: 'Website Content',
+    description: 'Topic tags for organizing Resource articles (e.g. "Soil Health", "Certification").',
+  },
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+    },
+    slugField('title', { admin: { position: undefined } }),
+  ],
+}
