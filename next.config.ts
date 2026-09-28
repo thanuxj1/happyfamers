@@ -31,6 +31,12 @@ const nextConfig: NextConfig = {
           protocol: url.protocol.replace(':', '') as 'http' | 'https',
         }
       }),
+      // Media now serves directly from Vercel Blob's CDN (see plugins/index.ts —
+      // disablePayloadAccessControl) rather than proxying through our own app.
+      {
+        hostname: '*.public.blob.vercel-storage.com',
+        protocol: 'https',
+      },
     ],
   },
   webpack: (webpackConfig) => {

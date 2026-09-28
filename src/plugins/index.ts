@@ -120,7 +120,16 @@ export const plugins: Plugin[] = [
   // BLOB_READ_WRITE_TOKEN isn't set, e.g. in local dev.
   vercelBlobStorage({
     collections: {
-      media: true,
+      // `disablePayloadAccessControl` makes image URLs point straight at
+      // Vercel Blob's own CDN instead of proxying every request through our
+      // app's /api/media/file route (a DB lookup + fetch-then-stream on a
+      // serverless function, on every image, every time — the main reason
+      // photos were loading slowly). The media collection is already
+      // publicly readable (`read: anyone`), so there's no access check being
+      // skipped by serving directly from the CDN.
+      media: {
+        disablePayloadAccessControl: true,
+      },
     },
     token: process.env.BLOB_READ_WRITE_TOKEN,
   }),
