@@ -230,8 +230,8 @@ export const seed = async ({
   })
   media.step3ImageDoc = await payload.create({
     collection: 'media',
-    data: { alt: 'Placeholder — replace with a photo of hands holding vermicompost' },
-    file: await placeholderImage({ label: 'Nutrient-Rich Vermicompost' }),
+    data: { alt: 'Hands sifting finished vermicompost with visible worms' },
+    file: localAsset('vermicompost-hands-worms.jpg'),
     overrideAccess: true,
   })
 
