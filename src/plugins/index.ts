@@ -3,6 +3,7 @@ import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
@@ -112,5 +113,15 @@ export const plugins: Plugin[] = [
         description: 'Auto-generated search index. You should not need to edit this directly.',
       },
     },
+  }),
+  // Vercel's serverless functions have no persistent local disk, so uploaded
+  // media must live in Vercel Blob storage instead. Falls back to local disk
+  // automatically (via the underlying plugin-cloud-storage adapter) when
+  // BLOB_READ_WRITE_TOKEN isn't set, e.g. in local dev.
+  vercelBlobStorage({
+    collections: {
+      media: true,
+    },
+    token: process.env.BLOB_READ_WRITE_TOKEN,
   }),
 ]
