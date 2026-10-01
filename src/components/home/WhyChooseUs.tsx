@@ -1,68 +1,39 @@
-'use client'
-
 import React from 'react'
-import { motion } from 'framer-motion'
-import { Droplets, Globe, Leaf, ShieldCheck, TrendingUp } from 'lucide-react'
-
+import { Leaf, TrendingUp, ShieldCheck, Globe, Droplets, Sprout, BarChart3 } from 'lucide-react'
 import type { HomePage } from '@/payload-types'
+import { LeafMark } from './SectionHeading'
 
-import { Reveal } from '@/components/motion/Reveal'
-import { TiltCard } from '@/components/motion/TiltCard'
-
-const iconMap = {
+const ICONS: Record<string, React.FC<{ className?: string }>> = {
   leaf: Leaf,
-  droplets: Droplets,
   trendingUp: TrendingUp,
   shieldCheck: ShieldCheck,
   globe: Globe,
-} as const
+  droplets: Droplets,
+  sprout: Sprout,
+  barChart: BarChart3,
+}
 
 export const WhyChooseUs: React.FC<{ data: HomePage }> = ({ data }) => {
-  const { whyChooseHeading, whyChooseItems, whyChooseNote } = data
-
+  const { whyChooseHeading, whyChooseItems } = data
   return (
-    <Reveal className="h-full" direction="up" delay={0.1}>
-      <TiltCard className="h-full" strength={3}>
-        <aside className="relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-emerald-900/60 bg-linear-to-br from-brand-forest-green to-brand-dark-green p-5 text-white shadow-lg sm:p-7">
-          <motion.div
-            animate={{ rotate: [0, 4, 0] }}
-            className="pointer-events-none absolute -bottom-8 -right-8"
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <Leaf className="h-64 w-64 text-white opacity-10" />
-          </motion.div>
-          <div>
-            <h3 className="mb-4 font-serif text-xl font-bold leading-snug tracking-tight sm:text-2xl">
-              {whyChooseHeading}
-            </h3>
-            <ul className="space-y-4 pt-1">
-              {whyChooseItems?.map((item, i) => {
-                const Icon = iconMap[item.icon as keyof typeof iconMap] || Leaf
-                return (
-                  <motion.li
-                    className="flex items-center gap-3"
-                    initial={{ opacity: 0, x: -16 }}
-                    key={i}
-                    transition={{ duration: 0.5, delay: 0.15 + i * 0.08 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                  >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-brand-light-lime">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <span className="text-[13px] font-medium text-zinc-100">{item.text}</span>
-                  </motion.li>
-                )
-              })}
-            </ul>
-          </div>
-          {whyChooseNote && (
-            <div className="mt-6 border-t border-emerald-800/40 pt-3 text-[11px] italic text-emerald-300/80">
-              {whyChooseNote}
-            </div>
-          )}
-        </aside>
-      </TiltCard>
-    </Reveal>
+    <div className="relative h-full overflow-hidden rounded-[20px] bg-[#2a4a28] px-7 py-7 text-white">
+      {/* Decorative watermark, matching the design's foliage motif. */}
+      <LeafMark className="pointer-events-none absolute -right-6 top-6 h-[150px] w-[150px] text-white/[0.06]" />
+
+      <h3 className="relative mb-5 max-w-[175px] font-serif text-[22px] font-bold leading-[1.25] text-white">
+        {whyChooseHeading}
+      </h3>
+      <ul className="relative space-y-3">
+        {whyChooseItems?.map((item, i) => {
+          const Icon = ICONS[item.icon as string] ?? Leaf
+          return (
+            <li key={i} className="flex items-center gap-4">
+              <Icon className="h-5 w-5 shrink-0 text-[#a8d96e]" />
+              <span className="text-[12.5px] leading-tight text-zinc-100">{item.text}</span>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
   )
 }

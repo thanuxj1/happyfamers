@@ -1,131 +1,81 @@
 'use client'
-import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
-
+import type { Form as FormType } from '@payloadcms/plugin-form-builder/types'
 import React, { useCallback, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
 import { useForm, FormProvider } from 'react-hook-form'
-
 import RichText from '@/components/RichText'
-import { fields } from '@/blocks/Form/fields'
 import { getClientSideURL } from '@/utilities/getURL'
 
-// A compact variant of `@/blocks/Form/Component` for embedding a form inside
-// a card (no outer container/border — the parent card supplies that chrome).
 export const EmbeddedContactForm: React.FC<{ form: FormType }> = ({ form: formFromProps }) => {
   const { id: formID, confirmationMessage, confirmationType, submitButtonLabel } = formFromProps
-
-  const formMethods = useForm({ defaultValues: formFromProps.fields })
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = formMethods
-
+  const formMethods = useForm<Record<string, string>>()
+  const { handleSubmit, register } = formMethods
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
-  const [error, setError] = useState<{ message: string; status?: string } | undefined>()
+  const [error, setError] = useState<string | undefined>()
 
-  const onSubmit = useCallback(
-    (data: FormFieldBlock[]) => {
-      const submitForm = async () => {
-        setError(undefined)
-        setIsSubmitting(true)
-        const dataToSend = Object.entries(data).map(([name, value]) => ({ field: name, value }))
+  const onSubmit = useCallback((data: Record<string, string>) => {
+    const go = async () => {
+      setError(undefined); setIsSubmitting(true)
+      const body = Object.entries(data).map(([name, value]) => ({ field: name, value }))
+      try {
+        const res = await fetch(`${getClientSideURL()}/api/form-submissions`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ form: formID, submissionData: body }),
+        })
+        const json = await res.json()
+        if (!res.ok) { setError(json.errors?.[0]?.message || 'Error'); setIsSubmitting(false); return }
+        setIsSubmitting(false); setHasSubmitted(true)
+      } catch { setError('Something went wrong.'); setIsSubmitting(false) }
+    }
+    void go()
+  }, [formID])
 
-        try {
-          const req = await fetch(`${getClientSideURL()}/api/form-submissions`, {
-            body: JSON.stringify({ form: formID, submissionData: dataToSend }),
-            headers: { 'Content-Type': 'application/json' },
-            method: 'POST',
-          })
+  const inp =
+    'w-full rounded-lg border border-[#e2dac8] bg-white px-3 py-1 text-[12px] text-zinc-700 placeholder:text-[#9a9384] focus:border-[#3a6b35] focus:outline-none focus:ring-1 focus:ring-[#3a6b35] transition-colors'
 
-          const res = await req.json()
-
-          if (req.status >= 400) {
-            setIsSubmitting(false)
-            setError({ message: res.errors?.[0]?.message || 'Internal Server Error', status: res.status })
-            return
-          }
-
-          setIsSubmitting(false)
-          setHasSubmitted(true)
-        } catch (err) {
-          console.warn(err)
-          setIsSubmitting(false)
-          setError({ message: 'Something went wrong.' })
-        }
-      }
-
-      void submitForm()
-    },
-    [formID],
-  )
+  if (hasSubmitted && confirmationType === 'message') {
+    return (
+      <div className="flex flex-col items-center gap-2 py-4 text-center">
+        <span className="text-2xl">🌱</span>
+        <div className="text-xs text-[#3a6b35]"><RichText data={confirmationMessage} enableGutter={false} /></div>
+      </div>
+    )
+  }
 
   return (
     <FormProvider {...formMethods}>
-      <AnimatePresence initial={false} mode="wait">
-        {hasSubmitted && confirmationType === 'message' ? (
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 10 }}
-            key="success"
-            transition={{ duration: 0.45, ease: 'easeOut' }}
-          >
-            <RichText data={confirmationMessage} enableGutter={false} />
-          </motion.div>
-        ) : (
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            initial={{ opacity: 1, y: 0 }}
-            key="form"
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            {error && (
-              <div className="mb-3 text-sm text-destructive">{`${error.status || '500'}: ${error.message || ''}`}</div>
-            )}
-            <form className="space-y-3" id={formID} onSubmit={handleSubmit(onSubmit)}>
-              {formFromProps.fields?.map((field, index) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
-                if (!Field) return null
-                return (
-                  <Field
-                    key={index}
-                    form={formFromProps}
-                    {...field}
-                    {...formMethods}
-                    control={control}
-                    errors={errors}
-                    register={register}
-                  />
-                )
-              })}
-
-              <button
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-accent-green px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-forest-green active:scale-95 disabled:cursor-not-allowed disabled:opacity-80 sm:text-sm"
-                disabled={isSubmitting}
-                form={formID}
-                type="submit"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    {submitButtonLabel}
-                    <span className="text-xs">🍃</span>
-                  </>
-                )}
-              </button>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {error && <p className="mb-2 text-[10.5px] text-red-500">{error}</p>}
+      <form id={formID} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1.5">
+        {/* Name + Email */}
+        <div className="grid grid-cols-2 gap-2">
+          <input className={inp} placeholder="Your Name"     type="text"  {...register('name',  { required: true })} />
+          <input className={inp} placeholder="Email Address" type="email" {...register('email', { required: true })} />
+        </div>
+        {/* Phone + Location */}
+        <div className="grid grid-cols-2 gap-2">
+          <input className={inp} placeholder="Phone Number" type="tel"  {...register('phone')} />
+          <input className={inp} placeholder="Location"     type="text" {...register('location')} />
+        </div>
+        {/* Message */}
+        <textarea
+          className={`${inp} min-h-[38px] resize-none`}
+          placeholder="Your Message"
+          rows={3}
+          {...register('message')}
+        />
+        {/* Submit */}
+        <button
+          type="submit"
+          form={formID}
+          disabled={isSubmitting}
+          className="flex items-center justify-center gap-2 self-start rounded-lg bg-[#4a7c35] px-6 py-2 text-[12.5px] font-semibold text-white shadow-sm hover:bg-[#3c6a2a] active:scale-[0.98] disabled:opacity-70 transition-all"
+        >
+          {isSubmitting
+            ? <><Loader2 className="h-3.5 w-3.5 animate-spin" />Sending…</>
+            : <>{submitButtonLabel || 'Talk to Our Team'} <span>🌿</span></>}
+        </button>
+      </form>
     </FormProvider>
   )
 }

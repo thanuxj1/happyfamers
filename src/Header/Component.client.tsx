@@ -38,12 +38,15 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <header className="relative z-30 bg-brand-dark-green text-white">
-      <nav aria-label="Main Navigation" className="container flex items-center justify-between py-4">
+      <nav
+        aria-label="Main Navigation"
+        className="mx-auto flex h-[72px] w-full max-w-[1536px] items-center justify-between px-6 lg:px-12"
+      >
         <Link className="flex items-center transition-transform hover:scale-[1.03]" href="/">
           <Logo />
         </Link>
 
-        <div className="hidden lg:flex items-center gap-5 xl:gap-7 text-[13px] font-medium tracking-wide">
+        <div className="hidden lg:flex items-center gap-6 xl:gap-9 text-[14px] font-medium tracking-wide">
           {navItems.map((item, i) => (
             <span
               key={i}
@@ -61,7 +64,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         <div className="flex items-center gap-3">
           <HoverBloom className="hidden rounded-full sm:block" color="rgba(255,255,255,0.35)" size={120}>
             <Link
-              className="flex items-center gap-2 rounded-full border border-white/20 bg-brand-forest-green px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:scale-105 hover:bg-brand-accent-green hover:shadow-md"
+              className="flex items-center gap-2 rounded-full border border-white/20 bg-brand-forest-green px-6 py-2.5 text-[14px] font-semibold text-white shadow-sm transition-all duration-200 hover:scale-105 hover:bg-brand-accent-green hover:shadow-md"
               href="/contact"
             >
               <Phone className="h-3.5 w-3.5" />

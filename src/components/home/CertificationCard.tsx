@@ -1,38 +1,38 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-
 import type { HomePage } from '@/payload-types'
+import { LeafMark } from './SectionHeading'
 
 export const CertificationCard: React.FC<{ data: HomePage }> = ({ data }) => {
-  const { certTitle, certDescription, certNumber, certBadgeLabel, certNumberLabel } = data
+  const { certTitle, certDescription, certNumber, certNumberLabel } = data
 
   return (
-    <div
-      className="flex flex-col justify-between rounded-2xl border border-brand-border-cream bg-brand-cream-card/80 p-4 shadow-sm sm:p-5 lg:col-span-3"
-      id="certification"
-    >
-      <div>
-        <h3 className="mb-3 font-serif text-sm font-bold text-emerald-950 sm:text-base">
-          {certTitle}
-        </h3>
-        <div className="mb-3 flex h-20 w-full items-center justify-center rounded-lg bg-brand-bright-lime text-white shadow-inner sm:h-24">
-          <div className="flex flex-col items-center text-center text-xs font-bold">
-            <span className="text-lg tracking-widest text-white">★ ★ ★</span>
-            <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-widest">
-              {certBadgeLabel}
-            </span>
-          </div>
-        </div>
-        <p className="text-[11px] leading-snug text-zinc-700">{certDescription}</p>
+    <div className="relative flex h-full flex-col overflow-hidden rounded-[18px] border border-[#e7e0cf] bg-[#f6f2e8] px-6 py-4">
+      <LeafMark className="pointer-events-none absolute -bottom-4 right-2 h-[120px] w-[120px] text-[#d8cfae]/40" />
+
+      <h3 className="relative mb-3.5 text-center font-serif text-[20px] font-bold text-[#1c3220]">
+        {certTitle}
+      </h3>
+
+      <div className="relative mb-3.5 flex gap-3.5">
+        <Image
+          src="/eu-organic-logo.svg"
+          alt="EU Organic Certification Logo"
+          width={124}
+          height={88}
+          className="h-[88px] w-[124px] shrink-0 rounded-sm object-cover"
+          priority
+        />
+        <p className="min-w-0 text-[10.5px] leading-[1.45] text-[#4b4639]">{certDescription}</p>
       </div>
-      <div className="mt-4 pt-2">
-        <Link
-          className="block w-full rounded-full border border-stone-400/80 bg-white/70 px-2 py-1.5 text-center text-[10px] font-semibold text-zinc-800"
-          href="/organic-certification"
-        >
-          {certNumberLabel} {certNumber}
-        </Link>
-      </div>
+
+      <Link
+        href="/organic-certification"
+        className="relative mt-auto self-start rounded-lg border border-[#cfc6ab] bg-transparent px-4 py-2 text-[12px] text-[#3f3b31] transition-colors hover:bg-[#ece6d6]"
+      >
+        {certNumberLabel} {certNumber}
+      </Link>
     </div>
   )
 }

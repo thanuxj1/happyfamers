@@ -1,55 +1,39 @@
 import React from 'react'
 import { Clock, Mail, MapPin, Phone } from 'lucide-react'
-
 import type { HomePage, Media as MediaType } from '@/payload-types'
-
 import { Media } from '@/components/Media'
 
 export const ContactInfoBox: React.FC<{ data: HomePage }> = ({ data }) => {
-  const {
-    phone,
-    email,
-    location,
-    workingHours,
-    infoStripImage,
-    callLabel,
-    emailLabel,
-    locationLabel,
-    hoursLabel,
-  } = data
+  const { phone, email, location, workingHours, infoStripImage, callLabel, emailLabel, locationLabel, hoursLabel } = data
 
   const rows = [
-    { icon: Phone, label: callLabel, value: phone },
-    { icon: Mail, label: emailLabel, value: email },
-    { icon: MapPin, label: locationLabel, value: location },
-    { icon: Clock, label: hoursLabel, value: workingHours },
+    { Icon: Phone,  label: callLabel,     value: phone },
+    { Icon: Mail,   label: emailLabel,    value: email },
+    { Icon: MapPin, label: locationLabel, value: location },
+    { Icon: Clock,  label: hoursLabel,    value: workingHours },
   ]
 
   return (
-    <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-emerald-950 bg-linear-to-br from-brand-forest-green to-brand-dark-green p-4 text-white shadow-md sm:p-5 md:col-span-2 lg:col-span-3">
-      <div className="relative z-10 space-y-3">
-        {rows.map(({ icon: Icon, label, value }, i) => (
-          <div className="flex items-start gap-2.5" key={i}>
-            <Icon className="mt-0.5 h-4 w-4 shrink-0 text-brand-light-lime" />
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
-                {label}
-              </p>
-              <p className="text-xs font-semibold text-zinc-100">{value}</p>
+    <div className="relative flex min-h-[260px] w-full flex-col overflow-hidden bg-[#2a4a28] text-white lg:min-h-0 lg:rounded-l-[20px]">
+      {/* Soil photo fades up into the panel, as in the design. Absolute so it
+          fills the column's leftover space instead of adding to its height. */}
+      <div className="absolute inset-x-0 bottom-0 h-[104px]">
+        {infoStripImage && typeof infoStripImage !== 'string' && (
+          <Media resource={infoStripImage as MediaType} fill imgClassName="object-cover" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2a4a28] via-[#2a4a28]/15 to-transparent" />
+      </div>
+
+      <div className="relative z-10 flex flex-col gap-3 px-7 pb-[58px] pt-4">
+        {rows.map(({ Icon, label, value }, i) => (
+          <div key={i} className="flex items-center gap-3.5">
+            <Icon className="h-[24px] w-[24px] shrink-0 text-[#a8d96e]" strokeWidth={1.6} />
+            <div className="min-w-0">
+              <p className="text-[11.5px] leading-tight text-zinc-300">{label}</p>
+              <p className="mt-0.5 text-[13px] leading-snug text-white">{value}</p>
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="relative -mx-4 -mb-4 mt-4 h-16 overflow-hidden rounded-b-2xl border-t border-emerald-950 sm:-mx-5 sm:-mb-5 sm:h-20">
-        {infoStripImage && typeof infoStripImage !== 'string' && (
-          <Media
-            resource={infoStripImage as MediaType}
-            fill
-            imgClassName="object-cover brightness-75"
-          />
-        )}
-        <div className="absolute inset-0 bg-emerald-950/20" />
       </div>
     </div>
   )

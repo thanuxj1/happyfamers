@@ -1,54 +1,63 @@
 import React from 'react'
-
 import type { HomePage, Media as MediaType } from '@/payload-types'
-
 import { Media } from '@/components/Media'
-import { RevealGroup, RevealItem } from '@/components/motion/Reveal'
-import { TiltCard } from '@/components/motion/TiltCard'
+import { SectionHeading } from './SectionHeading'
 
 export const ProcessSteps: React.FC<{ data: HomePage }> = ({ data }) => {
   const { processHeading, processSteps } = data
-
   return (
-    <div id="process">
-      <div className="mb-6 flex items-center justify-center gap-3">
-        <span className="h-px w-12 bg-zinc-300 sm:w-16" />
-        <h2 className="flex items-center gap-1.5 text-center font-serif text-base font-bold text-emerald-950 sm:text-lg">
-          {processHeading}
-          <span className="text-xs">🍃</span>
-        </h2>
-        <span className="h-px w-12 bg-zinc-300 sm:w-16" />
-      </div>
+    <div className="pt-[10px]" id="process">
+      <SectionHeading className="mb-4 justify-center" rule="both">
+        {processHeading}
+      </SectionHeading>
 
-      <RevealGroup className="grid grid-cols-1 gap-6 px-2 text-center sm:grid-cols-3 sm:gap-3" stagger={0.15}>
+      <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-0">
         {processSteps?.map((step, i) => (
-          <RevealItem className="relative flex flex-col items-center" key={i}>
-            <TiltCard className="mb-2" strength={10}>
-              <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-emerald-700/40 bg-white p-0.5 shadow-sm transition-shadow hover:shadow-lg">
-                {step.image && typeof step.image !== 'string' && (
-                  <Media
-                    resource={step.image as MediaType}
-                    fill
-                    imgClassName="object-cover rounded-full"
-                  />
-                )}
+          <React.Fragment key={i}>
+            <div className="flex w-full max-w-[260px] flex-col items-center px-1 text-center sm:w-auto sm:flex-1">
+              <div className="relative h-[100px] w-[100px] rounded-full border border-[#9bab6d] p-[5px]">
+                <div className="relative h-full w-full overflow-hidden rounded-full bg-stone-100">
+                  {step.image && typeof step.image !== 'string' && (
+                    <Media resource={step.image as MediaType} fill imgClassName="object-cover" />
+                  )}
+                </div>
               </div>
-            </TiltCard>
-            <span className="-mt-4 z-10 mb-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-forest-green text-[10px] font-bold text-white ring-2 ring-brand-cream-bg">
-              {i + 1}
-            </span>
-            <h3 className="mb-1 text-xs font-bold text-zinc-900 sm:text-sm">{step.title}</h3>
-            <p className="max-w-[220px] text-[11px] leading-tight text-zinc-600 sm:max-w-[180px]">
-              {step.description}
-            </p>
-            {processSteps && i < processSteps.length - 1 && (
-              <span className="absolute -right-3 top-9 hidden font-mono text-xs text-zinc-400 sm:block">
-                --&gt;
+              <span className="-mt-[11px] flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 border-[#f7f5f0] bg-[#6fa93f] text-[11px] font-semibold text-white">
+                {i + 1}
               </span>
+              <p className="mt-2 text-[12px] font-bold leading-tight text-[#2d6032] sm:whitespace-nowrap">
+                {step.title}
+              </p>
+              <p className="mt-1.5 text-[11px] leading-[1.5] text-[#6b6355]">{step.description}</p>
+            </div>
+            {processSteps && i < processSteps.length - 1 && (
+              <svg
+                aria-hidden="true"
+                className="hidden shrink-0 text-[#6fa93f] sm:mt-[44px] sm:block"
+                fill="none"
+                height="12"
+                viewBox="0 0 40 12"
+                width="40"
+              >
+                <path
+                  d="M1 6h30"
+                  stroke="currentColor"
+                  strokeDasharray="5 4"
+                  strokeLinecap="round"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M31 1.5 37 6l-6 4.5"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
+              </svg>
             )}
-          </RevealItem>
+          </React.Fragment>
         ))}
-      </RevealGroup>
+      </div>
     </div>
   )
 }

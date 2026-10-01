@@ -17,7 +17,14 @@ const wrap = (inner: string) => `<svg width="${W}" height="${H}" xmlns="http://w
 </svg>`
 
 const toFile = async (svg: string, name: string): Promise<File> => {
-  const data = await sharp(Buffer.from(svg)).png().toBuffer()
+  // Trimmed to the artwork's bounding box: the cards render these with
+  // `object-contain`, so baked-in white margin would shrink the product to a
+  // fraction of the slot it is given.
+  const data = await sharp(Buffer.from(svg))
+    .trim({ background: '#ffffff', threshold: 5 })
+    .extend({ top: 8, bottom: 8, left: 8, right: 8, background: '#ffffff' })
+    .png()
+    .toBuffer()
   return { name: `${name}.png`, data, mimetype: 'image/png', size: data.byteLength }
 }
 
