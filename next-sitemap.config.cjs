@@ -1,7 +1,15 @@
+// Mirrors src/utilities/getURL.ts: a localhost value left in a deployed
+// environment is ignored, so robots.txt and the sitemaps never advertise URLs
+// crawlers cannot reach. The Vercel host is only defined on Vercel builds.
+const configured = process.env.NEXT_PUBLIC_SERVER_URL
+const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL
+
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  process.env.VERCEL_PROJECT_PRODUCTION_URL ||
-  'https://example.com'
+  configured && !/localhost|127\.0\.0\.1/.test(configured)
+    ? configured
+    : vercelHost
+      ? `https://${vercelHost}`
+      : configured || 'http://localhost:3000'
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
@@ -19,7 +27,7 @@ module.exports = {
     policies: [
       {
         userAgent: '*',
-        disallow: '/admin/*',
+        disallow: ['/admin/*', '/manage', '/manage/*', '/next/*'],
       },
     ],
     additionalSitemaps: [
