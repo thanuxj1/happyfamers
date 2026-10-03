@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { getManagePayload } from '@/utilities/getManagePayload'
 import { textToLexical } from './_lib/lexical'
+import { buildPhotoUsage } from './_lib/photoUsage'
 
 function slugify(text: string): string {
   return text
@@ -513,6 +514,15 @@ export async function renamePhoto(id: string, alt: string) {
 
 export async function deletePhoto(id: string) {
   const { payload, user } = await getManagePayload()
+
+  // Checked here as well as hidden in the UI, because deleting a photo that is
+  // still on a page leaves a gap that is not obvious until someone visits it.
+  const usage = await buildPhotoUsage(payload)
+  const places = usage.get(Number(id))
+  if (places?.length) {
+    throw new Error(`That photo is still used on ${places.join(', ')}. Replace it there first.`)
+  }
+
   await payload.delete({ collection: 'media', id, user, overrideAccess: false })
   revalidatePath('/manage/photos')
 }
