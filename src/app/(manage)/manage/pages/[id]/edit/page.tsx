@@ -1,3 +1,4 @@
+import { getServerSideURL } from '@/utilities/getURL'
 import { notFound } from 'next/navigation'
 import { getManagePayload } from '@/utilities/getManagePayload'
 import { PageForm } from '../../../_components/PageForm'
@@ -18,7 +19,7 @@ export default async function EditPagePage({ params }: { params: Promise<{ id: s
     <div>
       <h1 className="text-2xl font-bold">{page.title}</h1>
       <div className="mt-6">
-        <PageForm page={page} />
+        <PageForm page={page} siteUrl={getServerSideURL()} />
       </div>
     </div>
   )

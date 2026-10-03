@@ -1,3 +1,4 @@
+import { getServerSideURL } from '@/utilities/getURL'
 import { ProductForm } from '../../_components/ProductForm'
 
 export default function NewProductPage() {
@@ -5,7 +6,7 @@ export default function NewProductPage() {
     <div>
       <h1 className="text-2xl font-bold">New product</h1>
       <div className="mt-6">
-        <ProductForm />
+        <ProductForm siteUrl={getServerSideURL()} />
       </div>
     </div>
   )

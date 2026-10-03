@@ -3,16 +3,22 @@
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { ImagePicker } from './ImagePicker'
+import { SeoFields } from './SeoFields'
 import { saveResource } from '../actions'
 import { lexicalToText } from '../_lib/lexical'
 
 type ResourceData = {
   id?: string | number
   title?: string | null
+  slug?: string | null
   content?: unknown
   heroImage?: { url?: string | null } | string | number | null
   categories?: ({ id?: string | number } | string | number)[] | null
-  meta?: { description?: string | null } | null
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | string | number | null
+  } | null
   _status?: string | null
 }
 
@@ -23,13 +29,18 @@ const field = 'w-full rounded-lg border border-border bg-white px-3 py-2.5 text-
 export function ResourceForm({
   resource,
   categories,
+  siteUrl,
 }: {
   resource?: ResourceData
   categories: Category[]
+  siteUrl: string
 }) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  // Mirrored so the search preview updates as these are typed.
+  const [title, setTitle] = useState(resource?.title ?? '')
+  const [summary, setSummary] = useState(resource?.meta?.description ?? '')
 
   const photoUrl =
     resource?.heroImage && typeof resource.heroImage === 'object' ? resource.heroImage.url : null
@@ -54,7 +65,13 @@ export function ResourceForm({
     <form action={handleSubmit} className="max-w-xl space-y-5">
       <label className="block">
         <span className="mb-1 block text-sm font-medium">Article title</span>
-        <input name="title" required defaultValue={resource?.title ?? ''} className={field} />
+        <input
+          name="title"
+          required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className={field}
+        />
       </label>
 
       <label className="block">
@@ -65,7 +82,8 @@ export function ResourceForm({
         <textarea
           name="summary"
           rows={2}
-          defaultValue={resource?.meta?.description ?? ''}
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
           className={`${field} resize-y`}
         />
       </label>
@@ -111,6 +129,19 @@ export function ResourceForm({
           </span>
         </span>
       </label>
+
+      <SeoFields
+        siteUrl={siteUrl}
+        path={`/posts/${resource?.slug ?? '…'}`}
+        fallbackTitle={title}
+        description={summary}
+        title={resource?.meta?.title}
+        imageUrl={
+          resource?.meta?.image && typeof resource.meta.image === 'object'
+            ? resource.meta.image.url
+            : null
+        }
+      />
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 

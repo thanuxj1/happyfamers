@@ -1,4 +1,5 @@
 import { getManagePayload } from '@/utilities/getManagePayload'
+import { getServerSideURL } from '@/utilities/getURL'
 import { ResourceForm } from '../../_components/ResourceForm'
 
 export default async function NewResourcePage() {
@@ -9,7 +10,7 @@ export default async function NewResourcePage() {
     <div>
       <h1 className="text-2xl font-bold">New article</h1>
       <div className="mt-6">
-        <ResourceForm categories={categories} />
+        <ResourceForm categories={categories} siteUrl={getServerSideURL()} />
       </div>
     </div>
   )

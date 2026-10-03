@@ -79,6 +79,18 @@ export async function saveProduct(id: string | null, formData: FormData) {
     .map((benefit) => ({ benefit }))
   if (benefits.length > 0) data.benefits = benefits
 
+  const existingProduct = id
+    ? await payload.findByID({ collection: 'products', id, depth: 1, draft: true })
+    : null
+  data.meta = await seoFrom(
+    payload,
+    user,
+    formData,
+    existingProduct?.meta,
+    String(data.shortDescription || ''),
+    `${title} photo`,
+  )
+
   if (id) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await payload.update({
@@ -193,6 +205,32 @@ export async function saveArchiveSettings(formData: FormData) {
 }
 
 /**
+ * Search-result overrides. Empty fields are stored as undefined rather than ''
+ * so generateMeta falls back to the document's own title, summary and photo.
+ */
+async function seoFrom(
+  payload: ManageSession['payload'],
+  user: ManageSession['user'],
+  formData: FormData,
+  existing: { title?: string | null; description?: string | null; image?: unknown } | null | undefined,
+  /** The summary shown on the site; blank means "keep whatever is stored". */
+  fallbackDescription: string,
+  alt: string,
+) {
+  // A form that does not render the panel at all must not wipe an override that
+  // is already stored, so absence and "cleared by the editor" are distinguished.
+  const title = formData.has('seoTitle')
+    ? String(formData.get('seoTitle') || '').trim() || undefined
+    : (existing?.title ?? undefined)
+
+  return {
+    title,
+    description: fallbackDescription || existing?.description || undefined,
+    image: await resolveImage(payload, user, formData, 'seoImage', existing?.image, alt),
+  }
+}
+
+/**
  * Replaces an array item's photo only when a new file was chosen, so saving the
  * page without touching the photos keeps the ones already there.
  */
@@ -294,6 +332,15 @@ export async function saveHomePage(formData: FormData) {
     email: text('email'),
     location: text('location'),
     workingHours: text('workingHours'),
+
+    meta: await seoFrom(
+      payload,
+      user,
+      formData,
+      current.meta,
+      '',
+      'Happy Farmers home page photo',
+    ),
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -352,11 +399,17 @@ export async function savePage(id: string, formData: FormData) {
     }),
   )
 
+  const meta = await seoFrom(payload, user, formData, page.meta, '', `${page.title} photo`)
+
   await payload.update({
     collection: 'pages',
     id,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: { title: String(formData.get('title') || page.title), layout: updated } as any,
+    data: {
+      title: String(formData.get('title') || page.title),
+      layout: updated,
+      meta,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any,
     draft: false,
     user,
     overrideAccess: false,
@@ -405,8 +458,12 @@ export async function saveResource(id: string | null, formData: FormData) {
     // The manager has no draft concept: an article is either live or it isn't.
     _status: publish ? 'published' : 'draft',
     categories: categoryId ? [Number(categoryId)] : [],
-    meta: { description: summary },
   }
+
+  const existing = id
+    ? await payload.findByID({ collection: 'posts', id, depth: 1, draft: true })
+    : null
+  data.meta = await seoFrom(payload, user, formData, existing?.meta, summary, `${title} photo`)
 
   if (publish) data.publishedAt = new Date().toISOString()
 

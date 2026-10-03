@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { ImagePicker } from './ImagePicker'
+import { SeoFields } from './SeoFields'
 import { saveHomePage } from '../actions'
 
 type Upload = { url?: string | null } | string | number | null | undefined
@@ -25,6 +26,11 @@ type HomePageData = {
   certTitle?: string | null
   certDescription?: string | null
   certNumber?: string | null
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | string | number | null
+  } | null
   contactHeading?: string | null
   contactSubtext?: string | null
   phone?: string | null
@@ -72,7 +78,7 @@ function Text({
   )
 }
 
-export function HomePageForm({ data }: { data: HomePageData }) {
+export function HomePageForm({ data, siteUrl }: { data: HomePageData; siteUrl: string }) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -166,6 +172,15 @@ export function HomePageForm({ data }: { data: HomePageData }) {
           <Text name="workingHours" label="Opening hours" defaultValue={data.workingHours} />
         </div>
       </Section>
+
+      <SeoFields
+        siteUrl={siteUrl}
+        path="/"
+        fallbackTitle="Healthy Soil. Healthy Harvest."
+        description={data.meta?.description ?? data.subtext ?? ''}
+        title={data.meta?.title}
+        imageUrl={data.meta?.image && typeof data.meta.image === 'object' ? data.meta.image.url : null}
+      />
 
       {error && <p className="text-sm text-destructive">{error}</p>}
       {saved && <p className="text-sm text-primary">Saved. Your changes are live on the website.</p>}

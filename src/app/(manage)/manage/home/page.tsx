@@ -1,3 +1,4 @@
+import { getServerSideURL } from '@/utilities/getURL'
 import { getManagePayload } from '@/utilities/getManagePayload'
 import { HomePageForm } from '../_components/HomePageForm'
 
@@ -12,7 +13,7 @@ export default async function ManageHomePage() {
         Everything on the front page of the website, top to bottom.
       </p>
       <div className="mt-6">
-        <HomePageForm data={data} />
+        <HomePageForm data={data} siteUrl={getServerSideURL()} />
       </div>
     </div>
   )

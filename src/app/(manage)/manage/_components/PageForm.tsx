@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { ImagePicker } from './ImagePicker'
+import { SeoFields } from './SeoFields'
 import { savePage } from '../actions'
 import { lexicalToText } from '../_lib/lexical'
 
@@ -16,17 +17,23 @@ type Block = {
 type PageData = {
   id: string | number
   title?: string | null
+  meta?: {
+    title?: string | null
+    description?: string | null
+    image?: { url?: string | null } | string | number | null
+  } | null
   slug?: string | null
   layout?: Block[] | null
 }
 
 const field = 'w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm'
 
-export function PageForm({ page }: { page: PageData }) {
+export function PageForm({ page, siteUrl }: { page: PageData; siteUrl: string }) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
+  const [title, setTitle] = useState(page.title ?? '')
 
   function handleSubmit(formData: FormData) {
     setError(null)
@@ -50,7 +57,12 @@ export function PageForm({ page }: { page: PageData }) {
       <section className="rounded-2xl border border-border bg-white p-6 shadow-sm">
         <label className="block">
           <span className="mb-1 block text-sm font-medium">Page title</span>
-          <input name="title" defaultValue={page.title ?? ''} className={field} />
+          <input
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={field}
+          />
         </label>
       </section>
 
@@ -117,6 +129,15 @@ export function PageForm({ page }: { page: PageData }) {
           </section>
         )
       })}
+
+      <SeoFields
+        siteUrl={siteUrl}
+        path={`/${page.slug ?? '…'}`}
+        fallbackTitle={title}
+        description={page.meta?.description ?? ''}
+        title={page.meta?.title}
+        imageUrl={page.meta?.image && typeof page.meta.image === 'object' ? page.meta.image.url : null}
+      />
 
       {error && <p className="text-sm text-destructive">{error}</p>}
       {saved && <p className="text-sm text-primary">Saved. Your changes are live on the website.</p>}

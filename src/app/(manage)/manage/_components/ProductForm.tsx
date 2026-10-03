@@ -3,24 +3,33 @@
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { ImagePicker } from './ImagePicker'
+import { SeoFields } from './SeoFields'
 import { saveProduct } from '../actions'
 import { lexicalToText } from '../_lib/lexical'
 
 type ProductData = {
   id?: string | number
   title?: string | null
+  slug?: string | null
   shortDescription?: string | null
   priceLabel?: string | null
   heroImage?: { url?: string | null } | string | number | null
   benefits?: { benefit?: string | null }[] | null
   content?: unknown
+  meta?: {
+    title?: string | null
+    image?: { url?: string | null } | string | number | null
+  } | null
 }
 
-export function ProductForm({ product }: { product?: ProductData }) {
+export function ProductForm({ product, siteUrl }: { product?: ProductData; siteUrl: string }) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [benefitCount, setBenefitCount] = useState(product?.benefits?.length || 1)
+  // Mirrored so the search preview updates as these are typed.
+  const [title, setTitle] = useState(product?.title ?? '')
+  const [summary, setSummary] = useState(product?.shortDescription ?? '')
 
   const heroImageUrl =
     product?.heroImage && typeof product.heroImage === 'object' ? product.heroImage.url : null
@@ -44,7 +53,8 @@ export function ProductForm({ product }: { product?: ProductData }) {
         <input
           name="title"
           required
-          defaultValue={product?.title ?? ''}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm"
         />
       </label>
@@ -57,7 +67,8 @@ export function ProductForm({ product }: { product?: ProductData }) {
           name="shortDescription"
           required
           rows={2}
-          defaultValue={product?.shortDescription ?? ''}
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
           className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm"
         />
         <span className="mt-1 block text-xs text-muted-foreground">Shown on the product card. One or two sentences.</span>
@@ -106,6 +117,19 @@ export function ProductForm({ product }: { product?: ProductData }) {
           className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm"
         />
       </label>
+
+      <SeoFields
+        siteUrl={siteUrl}
+        path={`/products/${product?.slug ?? '…'}`}
+        fallbackTitle={title}
+        description={summary}
+        title={product?.meta?.title}
+        imageUrl={
+          product?.meta?.image && typeof product.meta.image === 'object'
+            ? product.meta.image.url
+            : null
+        }
+      />
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 

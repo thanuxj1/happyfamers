@@ -1,3 +1,4 @@
+import { getServerSideURL } from '@/utilities/getURL'
 import { notFound } from 'next/navigation'
 import { getManagePayload } from '@/utilities/getManagePayload'
 import { ProductForm } from '../../../_components/ProductForm'
@@ -18,7 +19,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     <div>
       <h1 className="text-2xl font-bold">Edit product</h1>
       <div className="mt-6">
-        <ProductForm product={product} />
+        <ProductForm product={product} siteUrl={getServerSideURL()} />
       </div>
     </div>
   )
