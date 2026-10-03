@@ -4,6 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import {
+  FileText,
+  Home,
+  Image as ImageIcon,
   LayoutDashboard,
   ListTree,
   LogOut,
@@ -17,12 +20,16 @@ import {
 
 const LINKS = [
   { href: '/manage', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/manage/home', label: 'Home page', icon: Home },
   { href: '/manage/products', label: 'Products', icon: Package },
-  { href: '/manage/categories', label: 'Categories', icon: ListTree },
+  { href: '/manage/resources', label: 'Resources', icon: FileText },
+  { href: '/manage/photos', label: 'Photos', icon: ImageIcon },
   { href: '/manage/messages', label: 'Messages', icon: MessageSquare },
 ]
 
 const SITE_LINKS = [
+  { href: '/manage/pages', label: 'Pages', icon: FileText },
+  { href: '/manage/categories', label: 'Topics', icon: ListTree },
   { href: '/manage/site/header', label: 'Header', icon: Navigation },
   { href: '/manage/site/footer', label: 'Footer', icon: PanelBottom },
   { href: '/manage/site/pages', label: 'Products & Resources pages', icon: ListTree },

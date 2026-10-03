@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { getManagePayload } from '@/utilities/getManagePayload'
+import { textToLexical } from './_lib/lexical'
 
 function slugify(text: string): string {
   return text
@@ -191,24 +192,242 @@ export async function saveArchiveSettings(formData: FormData) {
   revalidatePath('/manage/site/pages')
 }
 
-// Payload's `content` field on Products is rich text (Lexical JSON). Our
-// simple textarea only collects plain text, so wrap each line as a paragraph
-// node in Lexical's document shape rather than asking the client to edit
-// JSON directly.
-function textToLexical(text: string) {
-  const paragraphs = text.split('\n').filter((line) => line.trim().length > 0)
-  return {
-    root: {
-      type: 'root',
-      children: paragraphs.map((line) => ({
-        type: 'paragraph',
-        children: [{ type: 'text', text: line, version: 1 }],
-        version: 1,
-      })),
-      direction: 'ltr' as const,
-      format: '' as const,
-      indent: 0,
-      version: 1,
-    },
+/**
+ * Replaces an array item's photo only when a new file was chosen, so saving the
+ * page without touching the photos keeps the ones already there.
+ */
+async function resolveImage(
+  payload: ManageSession['payload'],
+  user: ManageSession['user'],
+  formData: FormData,
+  field: string,
+  existing: unknown,
+  alt: string,
+) {
+  const file = formData.get(field) as File | null
+  if (file && file.size > 0) return uploadMedia(payload, user, file, alt)
+  if (existing && typeof existing === 'object') return (existing as { id?: number }).id
+  return existing ?? undefined
+}
+
+export async function saveHomePage(formData: FormData) {
+  const { payload, user } = await getManagePayload()
+  const current = await payload.findGlobal({ slug: 'home-page', depth: 1 })
+
+  const text = (name: string) => String(formData.get(name) || '')
+  const rows = (name: string) => formData.getAll(name).map(String)
+
+  const stepTitles = rows('stepTitle')
+  const stepDescriptions = rows('stepDescription')
+  const existingSteps = current.processSteps || []
+  const processSteps = await Promise.all(
+    stepTitles.map(async (title, i) => ({
+      ...existingSteps[i],
+      title,
+      description: stepDescriptions[i] || '',
+      image: await resolveImage(
+        payload,
+        user,
+        formData,
+        `stepImage${i}`,
+        existingSteps[i]?.image,
+        `${title} photo`,
+      ),
+    })),
+  )
+
+  const impactTitles = rows('impactTitle')
+  const impactDescriptions = rows('impactDescription')
+  const existingImpact = current.impactItems || []
+  const impactItems = await Promise.all(
+    impactTitles.map(async (title, i) => ({
+      ...existingImpact[i],
+      title,
+      description: impactDescriptions[i] || '',
+      image: await resolveImage(
+        payload,
+        user,
+        formData,
+        `impactImage${i}`,
+        existingImpact[i]?.image,
+        `${title} photo`,
+      ),
+    })),
+  )
+
+  const existingWhy = current.whyChooseItems || []
+  const whyChooseItems = rows('whyText')
+    .filter(Boolean)
+    .map((itemText, i) => ({ ...existingWhy[i], text: itemText }))
+
+  const data: Record<string, unknown> = {
+    badgeText: text('badgeText'),
+    headingLine1: text('headingLine1'),
+    headingAccent: text('headingAccent'),
+    subtext: text('subtext'),
+    primaryCtaLabel: text('primaryCtaLabel'),
+    secondaryCtaLabel: text('secondaryCtaLabel'),
+    backgroundImage: await resolveImage(
+      payload,
+      user,
+      formData,
+      'backgroundImage',
+      current.backgroundImage,
+      'Home page hero photo',
+    ),
+
+    processHeading: text('processHeading'),
+    processSteps,
+    productsHeading: text('productsHeading'),
+    whyChooseHeading: text('whyChooseHeading'),
+    whyChooseItems,
+    impactHeading: text('impactHeading'),
+    impactItems,
+
+    certTitle: text('certTitle'),
+    certDescription: text('certDescription'),
+    certNumber: text('certNumber'),
+
+    contactHeading: text('contactHeading'),
+    contactSubtext: text('contactSubtext'),
+    phone: text('phone'),
+    email: text('email'),
+    location: text('location'),
+    workingHours: text('workingHours'),
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await payload.updateGlobal({ slug: 'home-page', data: data as any, user, overrideAccess: false })
+  revalidatePath('/manage/home')
+  revalidatePath('/')
+}
+
+/**
+ * Saves a page's existing blocks in place.
+ *
+ * Blocks cannot be added, removed or reordered here on purpose — the layouts
+ * were designed up front, and the people editing this site need to change
+ * wording and photos, not rebuild page structure. Anything this form does not
+ * cover is preserved by spreading the stored block.
+ */
+export async function savePage(id: string, formData: FormData) {
+  const { payload, user } = await getManagePayload()
+  const page = await payload.findByID({ collection: 'pages', id, depth: 1, draft: true })
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const layout = ((page as any).layout || []) as any[]
+
+  const updated = await Promise.all(
+    layout.map(async (block, i) => {
+      if (block.blockType === 'content') {
+        const columns = (block.columns || []).map((column: unknown, j: number) => {
+          const value = formData.get(`block${i}_col${j}`)
+          return value === null
+            ? column
+            : { ...(column as object), richText: textToLexical(String(value)) }
+        })
+        return { ...block, columns }
+      }
+
+      if (block.blockType === 'cta') {
+        const value = formData.get(`block${i}_text`)
+        return value === null ? block : { ...block, richText: textToLexical(String(value)) }
+      }
+
+      if (block.blockType === 'mediaBlock') {
+        return {
+          ...block,
+          media: await resolveImage(
+            payload,
+            user,
+            formData,
+            `block${i}_media`,
+            block.media,
+            `${page.title} photo`,
+          ),
+        }
+      }
+
+      return block
+    }),
+  )
+
+  await payload.update({
+    collection: 'pages',
+    id,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: { title: String(formData.get('title') || page.title), layout: updated } as any,
+    draft: false,
+    user,
+    overrideAccess: false,
+  })
+
+  revalidatePath('/manage/pages')
+  if (page.slug) revalidatePath(`/${page.slug}`)
+}
+
+export async function uploadPhotos(formData: FormData) {
+  const { payload, user } = await getManagePayload()
+  const files = formData.getAll('photos').filter((f): f is File => f instanceof File && f.size > 0)
+
+  for (const file of files) {
+    const alt = file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')
+    await uploadMedia(payload, user, file, alt)
+  }
+
+  revalidatePath('/manage/photos')
+}
+
+export async function renamePhoto(id: string, alt: string) {
+  const { payload, user } = await getManagePayload()
+  await payload.update({ collection: 'media', id, data: { alt }, user, overrideAccess: false })
+  revalidatePath('/manage/photos')
+}
+
+export async function deletePhoto(id: string) {
+  const { payload, user } = await getManagePayload()
+  await payload.delete({ collection: 'media', id, user, overrideAccess: false })
+  revalidatePath('/manage/photos')
+}
+
+export async function saveResource(id: string | null, formData: FormData) {
+  const { payload, user } = await getManagePayload()
+
+  const title = String(formData.get('title') || '')
+  const summary = String(formData.get('summary') || '')
+  const categoryId = String(formData.get('category') || '')
+  const publish = formData.get('publish') === 'on'
+
+  const data: Record<string, unknown> = {
+    title,
+    slug: slugify(title),
+    content: textToLexical(String(formData.get('content') || '')),
+    // The manager has no draft concept: an article is either live or it isn't.
+    _status: publish ? 'published' : 'draft',
+    categories: categoryId ? [Number(categoryId)] : [],
+    meta: { description: summary },
+  }
+
+  if (publish) data.publishedAt = new Date().toISOString()
+
+  const photo = formData.get('heroImage') as File | null
+  if (photo && photo.size > 0) {
+    data.heroImage = await uploadMedia(payload, user, photo, `${title} photo`)
+  }
+
+  if (id) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await payload.update({ collection: 'posts', id, data: data as any, draft: false, user, overrideAccess: false })
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await payload.create({ collection: 'posts', data: data as any, draft: false, user, overrideAccess: false })
+  }
+
+  revalidatePath('/manage/resources')
+}
+
+export async function deleteResource(id: string) {
+  const { payload, user } = await getManagePayload()
+  await payload.delete({ collection: 'posts', id, user, overrideAccess: false })
+  revalidatePath('/manage/resources')
 }

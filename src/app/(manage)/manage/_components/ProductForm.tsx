@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { ImagePicker } from './ImagePicker'
 import { saveProduct } from '../actions'
+import { lexicalToText } from '../_lib/lexical'
 
 type ProductData = {
   id?: string | number
@@ -13,18 +14,6 @@ type ProductData = {
   heroImage?: { url?: string | null } | string | number | null
   benefits?: { benefit?: string | null }[] | null
   content?: unknown
-}
-
-function lexicalToText(content: unknown): string {
-  if (!content || typeof content !== 'object') return ''
-  const root = (content as { root?: { children?: unknown[] } }).root
-  if (!root?.children) return ''
-  return root.children
-    .map((node) => {
-      const n = node as { children?: { text?: string }[] }
-      return n.children?.map((c) => c.text ?? '').join('') ?? ''
-    })
-    .join('\n')
 }
 
 export function ProductForm({ product }: { product?: ProductData }) {
