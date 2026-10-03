@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache'
 import { getManagePayload } from '@/utilities/getManagePayload'
 import { textToLexical } from './_lib/lexical'
-import { buildPhotoUsage } from './_lib/photoUsage'
 
 function slugify(text: string): string {
   return text
@@ -494,39 +493,6 @@ export async function changeOwnPassword(formData: FormData) {
   })
 }
 
-export async function uploadPhotos(formData: FormData) {
-  const { payload, user } = await getManagePayload()
-  const files = formData.getAll('photos').filter((f): f is File => f instanceof File && f.size > 0)
-
-  for (const file of files) {
-    const alt = file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ')
-    await uploadMedia(payload, user, file, alt)
-  }
-
-  revalidatePath('/manage/photos')
-}
-
-export async function renamePhoto(id: string, alt: string) {
-  const { payload, user } = await getManagePayload()
-  await payload.update({ collection: 'media', id, data: { alt }, user, overrideAccess: false })
-  revalidatePath('/manage/photos')
-}
-
-export async function deletePhoto(id: string) {
-  const { payload, user } = await getManagePayload()
-
-  // Checked here as well as hidden in the UI, because deleting a photo that is
-  // still on a page leaves a gap that is not obvious until someone visits it.
-  const usage = await buildPhotoUsage(payload)
-  const places = usage.get(Number(id))
-  if (places?.length) {
-    throw new Error(`That photo is still used on ${places.join(', ')}. Replace it there first.`)
-  }
-
-  await payload.delete({ collection: 'media', id, user, overrideAccess: false })
-  revalidatePath('/manage/photos')
-}
-
 export async function saveResource(id: string | null, formData: FormData) {
   const { payload, user } = await getManagePayload()
 
@@ -534,11 +500,16 @@ export async function saveResource(id: string | null, formData: FormData) {
   const summary = String(formData.get('summary') || '')
   const categoryId = String(formData.get('category') || '')
   const publish = formData.get('publish') === 'on'
+  const body = String(formData.get('content') || '').trim()
+
+  // Posts require a body; without this the save fails as "Content > Content",
+  // which means nothing to whoever is writing the article.
+  if (!body) throw new Error('Please write the article before saving.')
 
   const data: Record<string, unknown> = {
     title,
     slug: slugify(title),
-    content: textToLexical(String(formData.get('content') || '')),
+    content: textToLexical(body),
     // The manager has no draft concept: an article is either live or it isn't.
     _status: publish ? 'published' : 'draft',
     categories: categoryId ? [Number(categoryId)] : [],

@@ -95,8 +95,11 @@ export function ResourceForm({
         <span className="mb-1 block text-xs text-muted-foreground">
           Write as you normally would. Leave a blank line between paragraphs.
         </span>
+        {/* Required by the posts collection; enforced here so an empty body is
+            caught before saving rather than coming back as a field error. */}
         <textarea
           name="content"
+          required
           rows={14}
           defaultValue={lexicalToText(resource?.content)}
           className={`${field} resize-y leading-relaxed`}

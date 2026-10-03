@@ -6,7 +6,6 @@ import { useState } from 'react'
 import {
   FileText,
   Home,
-  Image as ImageIcon,
   LayoutDashboard,
   ListTree,
   LogOut,
@@ -24,7 +23,6 @@ const LINKS = [
   { href: '/manage/home', label: 'Home page', icon: Home },
   { href: '/manage/products', label: 'Products', icon: Package },
   { href: '/manage/resources', label: 'Resources', icon: FileText },
-  { href: '/manage/photos', label: 'Photos', icon: ImageIcon },
   { href: '/manage/messages', label: 'Messages', icon: MessageSquare },
 ]
 
