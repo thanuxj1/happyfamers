@@ -16,8 +16,11 @@ export const ProductHero: React.FC<{
   const { heroImage, title, shortDescription, priceLabel } = product
 
   return (
-    <div className="relative -mt-[10.4rem] overflow-hidden bg-brand-dark-green text-white">
-      <div className="container relative z-10 grid items-center gap-10 pb-14 pt-[13rem] md:grid-cols-[1.1fr_1fr]">
+    // No negative margin: that existed so a full-bleed photo could run behind
+    // the header. The hero now has its own background, so pulling it up and
+    // padding it back down only left an empty band under the nav.
+    <div className="relative overflow-hidden bg-brand-dark-green text-white">
+      <div className="container relative z-10 grid items-center gap-10 py-14 md:grid-cols-[1.1fr_1fr]">
         <div>
           <div className="mb-5 text-sm uppercase tracking-[0.12em] text-brand-light-lime">Product</div>
 

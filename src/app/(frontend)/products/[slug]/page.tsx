@@ -45,8 +45,10 @@ export default async function ProductPage({ params: paramsPromise }: Args) {
 
   if (!product) return <PayloadRedirects url={url} />
 
+  // No top padding: the hero carries its own, and a gap here showed as a cream
+  // band between the header and the hero's background.
   return (
-    <article className="pt-16 pb-16">
+    <article className="pb-16">
       <PageClient />
 
       <PayloadRedirects disableNotFound url={url} />
