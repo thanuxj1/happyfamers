@@ -23,7 +23,22 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  // The site is run entirely from /manage, which has its own sign-in, password
+  // recovery and people management, so Payload's own dashboard route has been
+  // removed. These settings are kept because the config still validates them
+  // and the import map is generated from them; Payload's database, auth and
+  // REST API are unaffected.
   admin: {
+    meta: {
+      titleSuffix: ' - Happy Farmers',
+      icons: [
+        {
+          rel: 'icon',
+          type: 'image/svg+xml',
+          url: '/favicon.svg',
+        },
+      ],
+    },
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below.
@@ -65,6 +80,15 @@ export default buildConfig({
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
+  i18n: {
+    translations: {
+      en: {
+        general: {
+          payloadSettings: 'Happy Farmers Settings',
+        },
+      },
+    },
+  },
   email: process.env.RESEND_API_KEY
     ? resendAdapter({
         apiKey: process.env.RESEND_API_KEY,

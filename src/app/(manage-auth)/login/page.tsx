@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
 import { Leaf } from 'lucide-react'
@@ -74,6 +75,10 @@ function LoginForm() {
       >
         {pending ? 'Signing in…' : 'Sign in'}
       </button>
+
+      <Link href="/forgot-password" className="block text-center text-sm text-muted-foreground hover:underline">
+        Forgot your password?
+      </Link>
     </form>
   )
 }

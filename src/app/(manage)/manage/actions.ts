@@ -458,6 +458,26 @@ export async function removePerson(id: string) {
   revalidatePath('/manage/people')
 }
 
+/**
+ * Recovery that does not depend on email: anyone already signed in can set a
+ * new password for a colleague who is locked out.
+ */
+export async function setPersonPassword(id: string, password: string) {
+  const { payload, user } = await getManagePayload()
+
+  if (password.length < 8) throw new Error('The password needs to be at least 8 characters')
+
+  await payload.update({
+    collection: 'users',
+    id,
+    data: { password },
+    user,
+    overrideAccess: false,
+  })
+
+  revalidatePath('/manage/people')
+}
+
 export async function changeOwnPassword(formData: FormData) {
   const { payload, user } = await getManagePayload()
 

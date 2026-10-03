@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
-import { Trash2, UserPlus } from 'lucide-react'
-import { addPerson, changeOwnPassword, removePerson } from '../actions'
+import { KeyRound, Trash2, UserPlus } from 'lucide-react'
+import { addPerson, changeOwnPassword, removePerson, setPersonPassword } from '../actions'
 
 type Person = { id: string | number; email: string; name?: string | null }
 
@@ -46,6 +46,27 @@ export function PeopleManager({ people, currentUserId }: { people: Person[]; cur
                     <span className="font-medium">{person.name || person.email}</span>
                     {isYou && <span className="ml-2 text-xs text-muted-foreground">(you)</span>}
                     {person.name && <span className="block text-xs text-muted-foreground">{person.email}</span>}
+                  </td>
+                  <td className="p-4">
+                    {!isYou && (
+                      <button
+                        type="button"
+                        disabled={pending}
+                        onClick={() => {
+                          const next = prompt(
+                            `Set a new password for ${person.name || person.email}.\nAt least 8 characters — share it with them afterwards.`,
+                          )
+                          if (!next) return
+                          run(
+                            () => setPersonPassword(String(person.id), next),
+                            'Their password has been changed. Share the new one with them.',
+                          )
+                        }}
+                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:underline disabled:opacity-60"
+                      >
+                        <KeyRound size={13} /> Set password
+                      </button>
+                    )}
                   </td>
                   <td className="p-4 text-right">
                     {isYou || people.length <= 1 ? (
