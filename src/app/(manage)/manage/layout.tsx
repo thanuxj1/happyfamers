@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ManageLayout({ children }: { children: React.ReactNode }) {
-  const { user } = await getMeUser({ nullUserRedirect: '/admin/login?redirect=%2Fmanage' })
+  const { user } = await getMeUser({ nullUserRedirect: '/login?redirect=%2Fmanage' })
 
   return (
     <html lang="en" className={cn(dmSans.variable, playfairDisplay.variable)} suppressHydrationWarning>

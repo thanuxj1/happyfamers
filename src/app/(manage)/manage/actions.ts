@@ -419,6 +419,60 @@ export async function savePage(id: string, formData: FormData) {
   if (page.slug) revalidatePath(`/${page.slug}`)
 }
 
+export async function addPerson(formData: FormData) {
+  const { payload, user } = await getManagePayload()
+
+  const email = String(formData.get('email') || '').trim()
+  const password = String(formData.get('password') || '')
+  const name = String(formData.get('name') || '').trim()
+
+  if (!email) throw new Error('An email address is required')
+  if (password.length < 8) throw new Error('The password needs to be at least 8 characters')
+
+  const clash = await payload.find({ collection: 'users', where: { email: { equals: email } }, limit: 1 })
+  if (clash.docs.length > 0) throw new Error('Someone with that email can already sign in')
+
+  await payload.create({
+    collection: 'users',
+    data: { email, password, name },
+    user,
+    overrideAccess: false,
+  })
+
+  revalidatePath('/manage/people')
+}
+
+export async function removePerson(id: string) {
+  const { payload, user } = await getManagePayload()
+
+  // Both guards exist to prevent locking everyone out of the manager, which
+  // cannot be undone from inside the app.
+  if (String(user.id) === String(id)) {
+    throw new Error('You cannot remove your own account while signed in')
+  }
+
+  const { totalDocs } = await payload.find({ collection: 'users', limit: 0, depth: 0 })
+  if (totalDocs <= 1) throw new Error('This is the only account left, so it cannot be removed')
+
+  await payload.delete({ collection: 'users', id, user, overrideAccess: false })
+  revalidatePath('/manage/people')
+}
+
+export async function changeOwnPassword(formData: FormData) {
+  const { payload, user } = await getManagePayload()
+
+  const password = String(formData.get('password') || '')
+  if (password.length < 8) throw new Error('The password needs to be at least 8 characters')
+
+  await payload.update({
+    collection: 'users',
+    id: user.id,
+    data: { password },
+    user,
+    overrideAccess: false,
+  })
+}
+
 export async function uploadPhotos(formData: FormData) {
   const { payload, user } = await getManagePayload()
   const files = formData.getAll('photos').filter((f): f is File => f instanceof File && f.size > 0)

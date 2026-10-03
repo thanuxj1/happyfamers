@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Navigation,
   Package,
+  Users,
   PanelBottom,
   X,
 } from 'lucide-react'
@@ -32,6 +33,7 @@ const SITE_LINKS = [
   { href: '/manage/categories', label: 'Topics', icon: ListTree },
   { href: '/manage/site/header', label: 'Header', icon: Navigation },
   { href: '/manage/site/footer', label: 'Footer', icon: PanelBottom },
+  { href: '/manage/people', label: 'People', icon: Users },
   { href: '/manage/site/pages', label: 'Products & Resources pages', icon: ListTree },
 ]
 
@@ -124,7 +126,7 @@ export function ManageSidebar({ userName }: { userName: string }) {
             </div>
             <div className="border-t border-border pt-4 text-xs">
               <p className="truncate text-muted-foreground">{userName}</p>
-              <a href="/admin/logout" className="mt-2 flex items-center gap-2 text-sm font-medium text-destructive hover:underline">
+              <a href="/logout" className="mt-2 flex items-center gap-2 text-sm font-medium text-destructive hover:underline">
                 <LogOut size={14} /> Log out
               </a>
             </div>
@@ -146,7 +148,7 @@ export function ManageSidebar({ userName }: { userName: string }) {
 
         <div className="border-t border-border pt-4 text-xs">
           <p className="truncate text-muted-foreground">{userName}</p>
-          <a href="/admin/logout" className="mt-2 flex items-center gap-2 text-sm font-medium text-destructive hover:underline">
+          <a href="/logout" className="mt-2 flex items-center gap-2 text-sm font-medium text-destructive hover:underline">
             <LogOut size={14} /> Log out
           </a>
         </div>
