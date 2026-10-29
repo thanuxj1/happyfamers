@@ -50,7 +50,9 @@
   --color-brand-dark-green: #132c1c;
   --color-brand-mid-green: #1b3b27;
   --color-brand-forest-green: #235336;
-  --color-brand-accent-green: #3e8e41;
+  /* Darkened from #3e8e41, which gave white button labels a contrast ratio of
+     4.08 against the 4.5 minimum. #37803c measures 4.87. */
+  --color-brand-accent-green: #37803c;
   --color-brand-bright-lime: #71c043;
   --color-brand-light-lime: #a3e635;
   --color-brand-cream-bg: #f7f5ed;
