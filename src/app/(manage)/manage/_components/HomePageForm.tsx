@@ -5,6 +5,7 @@ import { useState, useTransition } from 'react'
 import { ImagePicker } from './ImagePicker'
 import { SeoFields } from './SeoFields'
 import { saveHomePage } from '../actions'
+import { UnsavedChangesGuard } from './UnsavedChangesGuard'
 
 type Upload = { url?: string | null } | string | number | null | undefined
 
@@ -104,6 +105,7 @@ export function HomePageForm({ data, siteUrl }: { data: HomePageData; siteUrl: s
 
   return (
     <form action={handleSubmit} className="max-w-2xl space-y-6">
+      <UnsavedChangesGuard />
       <Section title="Top of the page" hint="The big headline and photo visitors see first.">
         <Text name="badgeText" label="Small line above the headline" defaultValue={data.badgeText} />
         <Text name="headingLine1" label="Headline — first line" defaultValue={data.headingLine1} />

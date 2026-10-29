@@ -15,6 +15,7 @@ import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { ArchiveSettings } from './globals/ArchiveSettings/config'
 import { HomePage } from './globals/HomePage/config'
+import { OurStoryPage } from './globals/OurStoryPage/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -43,9 +44,6 @@ export default buildConfig({
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below.
       beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeDashboard: ['@/components/BeforeDashboard'],
       graphics: {
         Icon: '@/graphics/Icon',
         Logo: '@/graphics/Logo',
@@ -55,28 +53,6 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     user: Users.slug,
-    livePreview: {
-      breakpoints: [
-        {
-          label: 'Mobile',
-          name: 'mobile',
-          width: 375,
-          height: 667,
-        },
-        {
-          label: 'Tablet',
-          name: 'tablet',
-          width: 768,
-          height: 1024,
-        },
-        {
-          label: 'Desktop',
-          name: 'desktop',
-          width: 1440,
-          height: 900,
-        },
-      ],
-    },
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
@@ -100,6 +76,11 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL,
     },
+    // Schema auto-sync is off. It defaults to on outside production, and
+    // .env points local dev at the same Neon database the live site uses, so
+    // a stray `next dev` could have altered or dropped production tables.
+    // The schema is settled; change it with a migration, not a dev boot.
+    push: false,
   }),
   collections: [
     Pages,
@@ -110,7 +91,7 @@ export default buildConfig({
     Users,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, HomePage, ArchiveSettings],
+  globals: [Header, Footer, HomePage, OurStoryPage, ArchiveSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

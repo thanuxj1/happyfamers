@@ -6,6 +6,7 @@ import { ImagePicker } from './ImagePicker'
 import { SeoFields } from './SeoFields'
 import { savePage } from '../actions'
 import { lexicalToText } from '../_lib/lexical'
+import { UnsavedChangesGuard } from './UnsavedChangesGuard'
 
 type Block = {
   blockType?: string
@@ -54,6 +55,7 @@ export function PageForm({ page, siteUrl }: { page: PageData; siteUrl: string })
 
   return (
     <form action={handleSubmit} className="max-w-2xl space-y-6">
+      <UnsavedChangesGuard />
       <section className="rounded-2xl border border-border bg-white p-6 shadow-sm">
         <label className="block">
           <span className="mb-1 block text-sm font-medium">Page title</span>

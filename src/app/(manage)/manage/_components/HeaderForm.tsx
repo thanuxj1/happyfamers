@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { Trash2 } from 'lucide-react'
 import { saveHeader } from '../actions'
+import { UnsavedChangesGuard } from './UnsavedChangesGuard'
 
 type NavItem = { link?: { label?: string | null; url?: string | null } | null }
 
@@ -32,6 +33,7 @@ export function HeaderForm({ ctaLabel, navItems }: { ctaLabel: string; navItems:
 
   return (
     <form action={handleSubmit} className="max-w-xl space-y-6">
+      <UnsavedChangesGuard />
       <label className="block">
         <span className="mb-1 block text-sm font-medium">Header button text</span>
         <input

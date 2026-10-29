@@ -6,12 +6,16 @@ import { deleteProduct } from '../actions'
 
 export default async function ManageProductsPage() {
   const { payload } = await getManagePayload()
-  const { docs: products } = await payload.find({
+  const { docs } = await payload.find({
     collection: 'products',
     sort: '-updatedAt',
     limit: 100,
     depth: 1,
   })
+
+  // Empty drafts are skipped: they are not on the website, and a row reading
+  // "(No title)" looks like something is broken.
+  const products = docs.filter((product) => product.title || product.slug)
 
   return (
     <div>

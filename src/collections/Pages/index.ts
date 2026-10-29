@@ -10,7 +10,6 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { hero } from '@/heros/config'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { slugField } from '../../fields/slug'
-import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
 import {
@@ -43,20 +42,6 @@ export const Pages: CollectionConfig = {
     defaultColumns: ['title', 'slug', 'updatedAt'],
     group: 'Website Content',
     description: 'Standalone pages like "Our Story" or "Contact" (not the products or blog articles).',
-    livePreview: {
-      url: ({ data, req }) =>
-        generatePreviewPath({
-          slug: data?.slug,
-          collection: 'pages',
-          req,
-        }),
-    },
-    preview: (data, { req }) =>
-      generatePreviewPath({
-        slug: data?.slug as string,
-        collection: 'pages',
-        req,
-      }),
     useAsTitle: 'title',
   },
   fields: [

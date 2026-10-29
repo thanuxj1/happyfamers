@@ -543,3 +543,85 @@ export async function deleteResource(id: string) {
   await payload.delete({ collection: 'posts', id, user, overrideAccess: false })
   revalidatePath('/manage/resources')
 }
+
+/**
+ * Saves the Our Story page.
+ *
+ * The page keeps its bespoke layout, so this covers the wording and photos
+ * around that layout rather than letting sections be added or reordered.
+ */
+export async function saveOurStoryPage(formData: FormData) {
+  const { payload, user } = await getManagePayload()
+  const current = await payload.findGlobal({ slug: 'our-story-page', depth: 1 })
+
+  const text = (name: string) => String(formData.get(name) || '')
+  const rows = (name: string) => formData.getAll(name).map(String)
+
+  const data: Record<string, unknown> = {
+    ribbonText: text('ribbonText'),
+    heroEyebrow: text('heroEyebrow'),
+    headingLine1: text('headingLine1'),
+    headingLine2: text('headingLine2'),
+    heroSubtext: text('heroSubtext'),
+    heroButtonLabel: text('heroButtonLabel'),
+    heroImage: await resolveImage(
+      payload,
+      user,
+      formData,
+      'heroImage',
+      current.heroImage,
+      'Our Story hero photo',
+    ),
+
+    storyEyebrow: text('storyEyebrow'),
+    storyHeading: text('storyHeading'),
+    storyParagraphs: rows('storyParagraph')
+      .map((paragraph) => paragraph.trim())
+      .filter(Boolean)
+      .map((paragraph) => ({ text: paragraph })),
+    storyImage: await resolveImage(
+      payload,
+      user,
+      formData,
+      'storyImage',
+      current.storyImage,
+      'Our Story photo',
+    ),
+
+    highlights: rows('highlight')
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((item) => ({ text: item })),
+
+    missionTitle: text('missionTitle'),
+    missionText: text('missionText'),
+    visionTitle: text('visionTitle'),
+    visionText: text('visionText'),
+
+    closingHeading: text('closingHeading'),
+    closingSubtext: text('closingSubtext'),
+    closingButtonLabel: text('closingButtonLabel'),
+    closingImage: await resolveImage(
+      payload,
+      user,
+      formData,
+      'closingImage',
+      current.closingImage,
+      'Our Story closing photo',
+    ),
+
+    meta: await seoFrom(
+      payload,
+      user,
+      formData,
+      current.meta,
+      '',
+      'Our Story page photo',
+    ),
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await payload.updateGlobal({ slug: 'our-story-page', data: data as any, user, overrideAccess: false })
+  revalidatePath('/manage/our-story')
+  revalidatePath('/our-story')
+}

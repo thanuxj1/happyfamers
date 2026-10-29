@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { saveArchiveSettings } from '../actions'
+import { UnsavedChangesGuard } from './UnsavedChangesGuard'
 
 export function ArchiveSettingsForm({
   productsHeading,
@@ -36,6 +37,7 @@ export function ArchiveSettingsForm({
 
   return (
     <form action={handleSubmit} className="max-w-xl space-y-8">
+      <UnsavedChangesGuard />
       <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
         <h2 className="font-semibold text-primary">Products page</h2>
         <label className="mt-4 block">

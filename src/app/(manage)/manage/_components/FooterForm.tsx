@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { Trash2 } from 'lucide-react'
 import { saveFooter } from '../actions'
+import { UnsavedChangesGuard } from './UnsavedChangesGuard'
 
 type NavItem = { link?: { label?: string | null; url?: string | null } | null }
 type TrustBadge = { icon?: string | null; label?: string | null }
@@ -51,6 +52,7 @@ export function FooterForm({
 
   return (
     <form action={handleSubmit} className="max-w-xl space-y-6">
+      <UnsavedChangesGuard />
       <label className="block">
         <span className="mb-1 block text-sm font-medium">Company name (in the copyright line)</span>
         <input

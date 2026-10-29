@@ -26,9 +26,6 @@ export const HomePage: GlobalConfig = {
   admin: {
     group: 'Site Settings',
     description: 'Everything shown on the homepage — hero, process steps, products, contact info, etc.',
-    livePreview: {
-      url: '/',
-    },
   },
   fields: [
     {

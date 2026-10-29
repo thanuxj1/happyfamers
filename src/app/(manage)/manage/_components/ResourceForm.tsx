@@ -6,6 +6,7 @@ import { ImagePicker } from './ImagePicker'
 import { SeoFields } from './SeoFields'
 import { saveResource } from '../actions'
 import { lexicalToText } from '../_lib/lexical'
+import { UnsavedChangesGuard } from './UnsavedChangesGuard'
 
 type ResourceData = {
   id?: string | number
@@ -63,6 +64,7 @@ export function ResourceForm({
 
   return (
     <form action={handleSubmit} className="max-w-xl space-y-5">
+      <UnsavedChangesGuard />
       <label className="block">
         <span className="mb-1 block text-sm font-medium">Article title</span>
         <input

@@ -16,8 +16,7 @@ import { getServerSideURL } from '@/utilities/getURL'
 
 // Deliberately not async and free of dynamic APIs: awaiting draftMode() here
 // opted every page into dynamic rendering, so nothing could be cached however
-// its own revalidate was set. The pages that support preview call draftMode()
-// themselves.
+// its own revalidate was set. Keep it that way.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html

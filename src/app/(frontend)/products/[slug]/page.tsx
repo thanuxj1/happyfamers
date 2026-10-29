@@ -11,7 +11,6 @@ import { ProductHero } from '@/components/ProductHero'
 import { ProductSchema } from '@/components/ProductSchema'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { CheckCircle2 } from 'lucide-react'
 
 export async function generateStaticParams() {
@@ -52,8 +51,6 @@ export default async function ProductPage({ params: paramsPromise }: Args) {
       <PageClient />
 
       <PayloadRedirects disableNotFound url={url} />
-
-      {draft && <LivePreviewListener />}
 
       <ProductSchema product={product} />
 

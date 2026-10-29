@@ -109,12 +109,14 @@ export interface Config {
     header: Header;
     footer: Footer;
     'home-page': HomePage;
+    'our-story-page': OurStoryPage;
     'archive-settings': ArchiveSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'our-story-page': OurStoryPageSelect<false> | OurStoryPageSelect<true>;
     'archive-settings': ArchiveSettingsSelect<false> | ArchiveSettingsSelect<true>;
   };
   locale: null;
@@ -408,15 +410,6 @@ export interface Category {
    * Auto-filled from the title when first created. This is part of the page's web address — if you change it after the page is live, any existing links or bookmarks to it will stop working. Only edit this if you know what you're doing.
    */
   slug?: string | null;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1438,15 +1431,6 @@ export interface MediaSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1932,6 +1916,58 @@ export interface HomePage {
   createdAt?: string | null;
 }
 /**
+ * Everything on the Our Story page — headline, photos, story, mission and vision.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "our-story-page".
+ */
+export interface OurStoryPage {
+  id: number;
+  ribbonText?: string | null;
+  heroEyebrow?: string | null;
+  headingLine1?: string | null;
+  /**
+   * This line appears in gold.
+   */
+  headingLine2?: string | null;
+  heroSubtext?: string | null;
+  heroButtonLabel?: string | null;
+  heroImage?: (number | null) | Media;
+  storyEyebrow?: string | null;
+  storyHeading?: string | null;
+  storyParagraphs?:
+    | {
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  storyImage?: (number | null) | Media;
+  highlights?:
+    | {
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  missionTitle?: string | null;
+  missionText?: string | null;
+  visionTitle?: string | null;
+  visionText?: string | null;
+  closingHeading?: string | null;
+  closingSubtext?: string | null;
+  closingButtonLabel?: string | null;
+  closingImage?: (number | null) | Media;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * The heading and intro text at the top of the /products and /posts (Resources) listing pages.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2091,6 +2127,52 @@ export interface HomePageSelect<T extends boolean = true> {
   emailLabel?: T;
   locationLabel?: T;
   hoursLabel?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "our-story-page_select".
+ */
+export interface OurStoryPageSelect<T extends boolean = true> {
+  ribbonText?: T;
+  heroEyebrow?: T;
+  headingLine1?: T;
+  headingLine2?: T;
+  heroSubtext?: T;
+  heroButtonLabel?: T;
+  heroImage?: T;
+  storyEyebrow?: T;
+  storyHeading?: T;
+  storyParagraphs?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  storyImage?: T;
+  highlights?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  missionTitle?: T;
+  missionText?: T;
+  visionTitle?: T;
+  visionText?: T;
+  closingHeading?: T;
+  closingSubtext?: T;
+  closingButtonLabel?: T;
+  closingImage?: T;
   meta?:
     | T
     | {

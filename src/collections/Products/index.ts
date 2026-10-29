@@ -11,7 +11,6 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { slugField } from '../../fields/slug'
-import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidateProduct } from './hooks/revalidateProduct'
 
 import {
@@ -47,20 +46,6 @@ export const Products: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Website Content',
     description: 'The products shown on the homepage and the /products page (Vermicompost, Vermiwash, Coco Peat, etc).',
-    livePreview: {
-      url: ({ data, req }) =>
-        generatePreviewPath({
-          slug: data?.slug,
-          collection: 'products',
-          req,
-        }),
-    },
-    preview: (data, { req }) =>
-      generatePreviewPath({
-        slug: data?.slug as string,
-        collection: 'products',
-        req,
-      }),
   },
   fields: [
     {
