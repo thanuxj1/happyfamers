@@ -13,12 +13,12 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 const nextConfig: NextConfig = {
   images: {
+    // Everything under public/ is already publicly served, so allow the
+    // optimizer to handle all of it. Listing paths one by one meant each new
+    // static image failed with a 400 until someone remembered to add it.
     localPatterns: [
       {
-        pathname: '/api/media/file/**',
-      },
-      {
-        pathname: '/logo-farmer.png',
+        pathname: '/**',
       },
     ],
     qualities: [100],
