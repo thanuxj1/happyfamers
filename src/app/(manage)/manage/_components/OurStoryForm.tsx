@@ -163,7 +163,7 @@ export function OurStoryForm({ data, siteUrl }: { data: OurStoryData; siteUrl: s
       <SeoFields
         siteUrl={siteUrl}
         path="/our-story"
-        fallbackTitle="Our Story | Happy Farmers"
+        fallbackTitle="Our Story"
         title={data.meta?.title}
         description={data.meta?.description ?? ''}
         imageUrl={urlOf(data.meta?.image as Upload)}

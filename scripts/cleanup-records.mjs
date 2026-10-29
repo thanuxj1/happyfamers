@@ -4,7 +4,10 @@
  *   - empty draft pages and products (no title, no address, never published)
  *   - the demo-author@example.com account left behind by the sample content
  *
- * Run once:  node scripts/cleanup-records.mjs
+ * Run once:  npx tsx scripts/cleanup-records.mjs
+ *
+ * (tsx rather than node: this loads src/payload.config.ts, and plain node
+ * cannot read TypeScript.)
  *
  * It prints what it will remove and asks before doing anything. Nothing here is
  * on the live website, so removing it changes nothing a visitor can see — but

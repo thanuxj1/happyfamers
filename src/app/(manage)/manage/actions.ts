@@ -554,8 +554,10 @@ export async function saveOurStoryPage(formData: FormData) {
   const { payload, user } = await getManagePayload()
   const current = await payload.findGlobal({ slug: 'our-story-page', depth: 1 })
 
-  const text = (name: string) => String(formData.get(name) || '')
-  const rows = (name: string) => formData.getAll(name).map(String)
+  // Browsers submit textarea newlines as CRLF. The page splits headings on \n,
+  // so without this a stray carriage return rides along on every line.
+  const text = (name: string) => String(formData.get(name) || '').replace(/\r\n?/g, '\n')
+  const rows = (name: string) => formData.getAll(name).map((value) => String(value).replace(/\r\n?/g, '\n'))
 
   const data: Record<string, unknown> = {
     ribbonText: text('ribbonText'),
