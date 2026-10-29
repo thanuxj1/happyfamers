@@ -82,7 +82,7 @@ export const HomeHero: React.FC<{ data: HomePage }> = ({ data }) => {
               <LeafMark className="h-4 w-4 text-brand-light-lime" />
             </Link>
             <Link
-              className="flex items-center gap-2 rounded-full border border-white/40 bg-black/35 px-5 py-3 text-[14px] font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/55"
+              className="flex items-center gap-2 rounded-full border border-white/40 bg-black/60 px-5 py-3 text-[14px] font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/75"
               href="#process"
             >
               {secondaryCtaLabel}
