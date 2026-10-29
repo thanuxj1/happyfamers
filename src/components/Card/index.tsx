@@ -35,6 +35,7 @@ export const Card: React.FC<{
   // photo rather than "No image".
   const cardImage = meta?.image ?? doc?.heroImage
 
+  const isProduct = relationTo === 'products'
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
@@ -48,10 +49,38 @@ export const Card: React.FC<{
       )}
       ref={card.ref}
     >
-      <div className="relative w-full ">
-        {!cardImage && <div className="">No image</div>}
-        {cardImage && typeof cardImage !== 'string' && <Media resource={cardImage} size="33vw" />}
-      </div>
+      {/* Product photographs are cut out on transparent backgrounds, so they
+          are stood on the card with a drawn shadow rather than run edge to
+          edge. Bleeding them cropped the packaging and left products touching
+          the card's sides. Posts keep the full-bleed photo. */}
+      {isProduct ? (
+        <div className="relative flex h-[240px] w-full items-end justify-center px-5 pb-5 pt-6">
+          {!cardImage && <div>No image</div>}
+          {cardImage && typeof cardImage !== 'string' && (
+            <>
+              <span
+                aria-hidden
+                className="absolute bottom-4 left-1/2 h-[14px] w-[48%] -translate-x-1/2 rounded-[50%]"
+                style={{
+                  background:
+                    'radial-gradient(ellipse at center, rgba(60,45,25,0.26), rgba(60,45,25,0) 70%)',
+                }}
+              />
+              <Media
+                resource={cardImage}
+                size="(max-width: 640px) 90vw, 33vw"
+                className="relative flex items-end justify-center"
+                imgClassName="max-h-[196px] w-auto object-contain"
+              />
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="relative w-full ">
+          {!cardImage && <div className="">No image</div>}
+          {cardImage && typeof cardImage !== 'string' && <Media resource={cardImage} size="33vw" />}
+        </div>
+      )}
       <div className="p-4">
         {showCategories && hasCategories && (
           <div className="uppercase text-sm mb-4">

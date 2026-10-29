@@ -36,12 +36,26 @@ export const ProductHero: React.FC<{
         </div>
 
         {heroImage && typeof heroImage !== 'string' && (
-          <div className="relative mx-auto aspect-[4/3] w-full max-w-[420px] overflow-hidden rounded-2xl bg-white">
+          // No white panel: the photographs are cut out on transparent
+          // backgrounds, so the product stands directly on the dark green with
+          // a drawn shadow under it. A white box here framed the cut-out in
+          // exactly the rectangle it was meant to lose.
+          <div className="relative mx-auto flex aspect-[4/3] w-full max-w-[420px] items-end justify-center">
+            <span
+              aria-hidden
+              className="absolute bottom-[8%] left-1/2 h-[18px] w-[52%] -translate-x-1/2 rounded-[50%]"
+              style={{
+                background:
+                  'radial-gradient(ellipse at center, rgba(0,0,0,0.42), rgba(0,0,0,0) 70%)',
+              }}
+            />
             <Media
-              fill
               priority
               size="(max-width: 768px) 90vw, 420px"
-              imgClassName="object-contain"
+              // See ProductsPreview: capped in pixels, because the wrappers
+              // Media adds are auto-height and a percentage collapses to zero.
+              className="relative flex items-end justify-center"
+              imgClassName="max-h-[280px] w-auto object-contain"
               resource={heroImage}
             />
           </div>
