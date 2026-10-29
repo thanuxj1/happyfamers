@@ -28,6 +28,7 @@ export default async function Page() {
       title: true,
       slug: true,
       meta: true,
+      heroImage: true,
       priceLabel: true,
     },
   })

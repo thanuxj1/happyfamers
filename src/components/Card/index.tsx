@@ -8,8 +8,11 @@ import type { Post, Product } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'>
+export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'> & {
+  heroImage?: Post['heroImage']
+}
 export type CardProductData = Pick<Product, 'slug' | 'meta' | 'title' | 'priceLabel'> & {
+  heroImage?: Product['heroImage']
   categories?: never
 }
 
@@ -26,7 +29,11 @@ export const Card: React.FC<{
 
   const { slug, categories, meta, title } = doc || {}
   const priceLabel = doc && 'priceLabel' in doc ? doc.priceLabel : undefined
-  const { description, image: metaImage } = meta || {}
+  const { description } = meta || {}
+
+  // The social image is an override; without one the card shows the item's own
+  // photo rather than "No image".
+  const cardImage = meta?.image ?? doc?.heroImage
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
@@ -42,8 +49,8 @@ export const Card: React.FC<{
       ref={card.ref}
     >
       <div className="relative w-full ">
-        {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+        {!cardImage && <div className="">No image</div>}
+        {cardImage && typeof cardImage !== 'string' && <Media resource={cardImage} size="33vw" />}
       </div>
       <div className="p-4">
         {showCategories && hasCategories && (
