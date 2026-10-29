@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 // so a sign-in page nested under it would redirect to itself.
 export default function ManageAuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn(dmSans.variable, playfairDisplay.variable)} suppressHydrationWarning>
+    <html lang="en" data-theme="light" className={cn(dmSans.variable, playfairDisplay.variable)} suppressHydrationWarning>
       <head>
         <InitTheme />
       </head>

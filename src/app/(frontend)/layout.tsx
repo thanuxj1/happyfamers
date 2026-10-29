@@ -22,6 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html
       className={cn(dmSans.variable, playfairDisplay.variable)}
+      data-theme="light"
       lang="en"
       suppressHydrationWarning
     >

@@ -226,11 +226,7 @@
   }
 }
 
-html {
-  opacity: 0;
-}
-
-html[data-theme='dark'],
-html[data-theme='light'] {
-  opacity: initial;
-}
+/* The page used to be opacity:0 until a client script set data-theme, which
+   meant every navigation showed a blank page until JavaScript ran. The theme is
+   fixed to light and is now set server-side on <html>, so there is no flash to
+   guard against and nothing to wait for. */

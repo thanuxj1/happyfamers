@@ -16,7 +16,7 @@ export default async function ManageLayout({ children }: { children: React.React
   const { user } = await getMeUser({ nullUserRedirect: '/login?redirect=%2Fmanage' })
 
   return (
-    <html lang="en" className={cn(dmSans.variable, playfairDisplay.variable)} suppressHydrationWarning>
+    <html lang="en" data-theme="light" className={cn(dmSans.variable, playfairDisplay.variable)} suppressHydrationWarning>
       <head>
         <InitTheme />
       </head>
