@@ -4,21 +4,21 @@ import { cn } from '@/utilities/ui'
 import { dmSans, playfairDisplay } from '@/fonts'
 import React from 'react'
 
-import { AdminBar } from '@/components/AdminBar'
 import { LocalBusinessSchema } from '@/components/LocalBusinessSchema'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode } from 'next/headers'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isEnabled } = await draftMode()
-
+// Deliberately not async and free of dynamic APIs: awaiting draftMode() here
+// opted every page into dynamic rendering, so nothing could be cached however
+// its own revalidate was set. The pages that support preview call draftMode()
+// themselves.
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       className={cn(dmSans.variable, playfairDisplay.variable)}
@@ -34,12 +34,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <AdminBar
-            adminBarProps={{
-              preview: isEnabled,
-            }}
-          />
-
           <Header />
           {children}
           <Footer />
