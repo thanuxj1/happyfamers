@@ -135,7 +135,7 @@ export default async function OurStoryPage() {
 
         <div className="relative order-1 min-h-[280px] md:order-2 md:min-h-[460px]">
           <Image
-            src="/our-story-soil.png"
+            src="/our-story-soil.jpg"
             alt="Earthworms working through rich, dark compost"
             fill
             sizes="(max-width: 768px) 100vw, 50vw"

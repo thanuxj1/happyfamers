@@ -45,6 +45,11 @@ const placeholderBlur =
  * remotePatterns for optimization. Only add `loader` if using external CDNs with custom transforms.
  */
 
+// Photographs at quality 100 were running 500-650KB each and the home page was
+// transferring almost 5MB. 75 is the usual web default and visually equivalent
+// once the optimizer has re-encoded to WebP.
+const IMAGE_QUALITY = 75
+
 export const ImageMedia: React.FC<MediaProps> = (props) => {
   const {
     alt: altFromProps,
@@ -84,21 +89,40 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         .map(([, value]) => `(max-width: ${value}px) ${value * 2}w`)
         .join(', ')
 
+  // When fill is used, Next.js requires the immediate parent to have position:relative.
+  // The <picture> wrapper has position:static by default, which breaks fill images.
+  // So for fill images we render NextImage directly without any wrapper.
+  if (fill) {
+    return (
+      <NextImage
+        alt={alt || ''}
+        className={cn(imgClassName)}
+        fill
+        placeholder="blur"
+        blurDataURL={placeholderBlur}
+        priority={priority}
+        quality={IMAGE_QUALITY}
+        loading={loading}
+        sizes={sizes}
+        src={src}
+      />
+    )
+  }
+
   return (
     <picture className={cn(pictureClassName)}>
       <NextImage
         alt={alt || ''}
         className={cn(imgClassName)}
-        fill={fill}
-        height={!fill ? height : undefined}
+        height={height}
         placeholder="blur"
         blurDataURL={placeholderBlur}
         priority={priority}
-        quality={100}
+        quality={IMAGE_QUALITY}
         loading={loading}
         sizes={sizes}
         src={src}
-        width={!fill ? width : undefined}
+        width={width}
       />
     </picture>
   )
