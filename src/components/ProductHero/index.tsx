@@ -36,7 +36,7 @@ export const ProductHero: React.FC<{
         </div>
 
         {heroImage && typeof heroImage !== 'string' && (
-          <div className="relative mx-auto aspect-[4/3] w-full max-w-[420px] overflow-hidden rounded-2xl bg-[#eee7d8]">
+          <div className="relative mx-auto aspect-[4/3] w-full max-w-[420px] overflow-hidden rounded-2xl bg-white">
             <Media fill priority imgClassName="object-contain" resource={heroImage} />
           </div>
         )}

@@ -15,8 +15,9 @@ export const ProductsPreview: React.FC<{ data: HomePage; products: Product[] }> 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {products.map((product) => (
           <div key={product.id} className="flex flex-col rounded-xl bg-[#eee7d8] p-3">
-            {/* The photo carries the card's own background tone, so it sits flush. */}
-            <div className="relative mb-2 h-[170px] w-full sm:h-[112px]">
+            {/* White tile: the product photographs are shot on a pale studio
+                backdrop, which would read as a grey patch on the cream card. */}
+            <div className="relative mb-2 h-[170px] w-full overflow-hidden rounded-lg bg-white sm:h-[132px]">
               {product.heroImage && typeof product.heroImage !== 'string' && (
                 <Media resource={product.heroImage as MediaType} fill imgClassName="object-contain" />
               )}
