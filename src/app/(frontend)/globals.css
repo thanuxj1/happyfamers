@@ -51,8 +51,9 @@
   --color-brand-mid-green: #1b3b27;
   --color-brand-forest-green: #235336;
   /* Darkened from #3e8e41, which gave white button labels a contrast ratio of
-     4.08 against the 4.5 minimum. #37803c measures 4.87. */
-  --color-brand-accent-green: #37803c;
+     4.08 against the 4.5 minimum. #2f6d2c clears 4.5 on every surface it is
+     used on, including the darker card background. */
+  --color-brand-accent-green: #2f6d2c;
   --color-brand-bright-lime: #71c043;
   --color-brand-light-lime: #a3e635;
   --color-brand-cream-bg: #f7f5ed;
@@ -108,8 +109,8 @@
   --popover: #f7f5ed;
   --popover-foreground: #1f2937;
   /* Matches --color-brand-accent-green: white button labels and text-primary
-     on cream both failed contrast at #3e8e41. */
-  --primary: #37803c;
+     on the card background both failed contrast. */
+  --primary: #2f6d2c;
   --primary-foreground: #ffffff;
   --secondary: #eeeae0;
   --secondary-foreground: #1f2937;
