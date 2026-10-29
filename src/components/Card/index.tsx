@@ -77,11 +77,12 @@ export const Card: React.FC<{
         )}
         {titleToUse && (
           <div className="prose">
-            <h3>
+            {/* h2: these cards sit directly under the page h1, so h3 skipped a level */}
+            <h2>
               <Link className="not-prose" href={href} ref={link.ref}>
                 {titleToUse}
               </Link>
-            </h3>
+            </h2>
           </div>
         )}
         {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}

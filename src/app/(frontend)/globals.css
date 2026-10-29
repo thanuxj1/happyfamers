@@ -107,7 +107,9 @@
   --card-foreground: #1f2937;
   --popover: #f7f5ed;
   --popover-foreground: #1f2937;
-  --primary: #3e8e41;
+  /* Matches --color-brand-accent-green: white button labels and text-primary
+     on cream both failed contrast at #3e8e41. */
+  --primary: #37803c;
   --primary-foreground: #ffffff;
   --secondary: #eeeae0;
   --secondary-foreground: #1f2937;
