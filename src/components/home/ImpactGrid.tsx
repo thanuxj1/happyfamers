@@ -28,7 +28,12 @@ export const ImpactGrid: React.FC<{ data: HomePage }> = ({ data }) => {
               <div className="relative mb-3.5 h-[90px] w-full rounded-xl">
                 <div className="relative h-full w-full overflow-hidden rounded-xl">
                   {item.image && typeof item.image !== 'string' && (
-                    <Media resource={item.image as MediaType} fill imgClassName="object-cover" />
+                    <Media
+                      resource={item.image as MediaType}
+                      fill
+                      size="(max-width: 640px) 45vw, 150px"
+                      imgClassName="object-cover"
+                    />
                   )}
                 </div>
                 <span className="absolute -bottom-[13px] left-1/2 flex h-[26px] w-[26px] -translate-x-1/2 items-center justify-center rounded-full border border-[#cfd8a8] bg-[#faf8f1]">

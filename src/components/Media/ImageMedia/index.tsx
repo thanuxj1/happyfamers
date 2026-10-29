@@ -82,12 +82,12 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
   const loading = loadingFromProps || (!priority ? 'lazy' : undefined)
 
-  // NOTE: this is used by the browser to determine which image to download at different screen sizes
-  const sizes = sizeFromProps
-    ? sizeFromProps
-    : Object.entries(breakpoints)
-        .map(([, value]) => `(max-width: ${value}px) ${value * 2}w`)
-        .join(', ')
+  // Tells the browser how wide the image will be displayed, so it can pick a
+  // variant. The previous default emitted `1280w`-style descriptors, which are
+  // only valid in srcset — `sizes` takes CSS lengths, so browsers discarded it
+  // and downloaded the largest variant for every image on the page. Callers
+  // should pass `size`; 100vw is the safe fallback when they don't.
+  const sizes = sizeFromProps ?? '100vw'
 
   // When fill is used, Next.js requires the immediate parent to have position:relative.
   // The <picture> wrapper has position:static by default, which breaks fill images.

@@ -16,7 +16,9 @@ import { CertificationCard } from '@/components/home/CertificationCard'
 import { ContactFormBox } from '@/components/home/ContactFormBox'
 import { ContactInfoBox } from '@/components/home/ContactInfoBox'
 
-export const revalidate = 0
+// Cached like the other pages; Payload revalidates this path when content is
+// saved, so edits still appear immediately.
+export const revalidate = 600
 
 export default async function HomePageRoute() {
   const homePage = await getCachedGlobal('home-page', 2)()

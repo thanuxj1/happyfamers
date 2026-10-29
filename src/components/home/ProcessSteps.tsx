@@ -18,7 +18,7 @@ export const ProcessSteps: React.FC<{ data: HomePage }> = ({ data }) => {
               <div className="relative h-[100px] w-[100px] rounded-full border border-[#9bab6d] p-[5px]">
                 <div className="relative h-full w-full overflow-hidden rounded-full bg-stone-100">
                   {step.image && typeof step.image !== 'string' && (
-                    <Media resource={step.image as MediaType} fill imgClassName="object-cover" />
+                    <Media resource={step.image as MediaType} fill size="110px" imgClassName="object-cover" />
                   )}
                 </div>
               </div>

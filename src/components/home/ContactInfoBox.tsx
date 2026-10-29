@@ -19,7 +19,12 @@ export const ContactInfoBox: React.FC<{ data: HomePage }> = ({ data }) => {
           fills the column's leftover space instead of adding to its height. */}
       <div className="absolute inset-x-0 bottom-0 h-[104px]">
         {infoStripImage && typeof infoStripImage !== 'string' && (
-          <Media resource={infoStripImage as MediaType} fill imgClassName="object-cover" />
+          <Media
+            resource={infoStripImage as MediaType}
+            fill
+            size="(max-width: 1024px) 100vw, 320px"
+            imgClassName="object-cover"
+          />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-[#2a4a28] via-[#2a4a28]/15 to-transparent" />
       </div>
