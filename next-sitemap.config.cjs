@@ -16,20 +16,23 @@ module.exports = {
   siteUrl: SITE_URL,
   generateRobotsTxt: true,
   exclude: [
+    '/posts-sitemap.xml',
     '/pages-sitemap.xml',
     '/products-sitemap.xml',
     '/*',
+    '/posts/*',
     '/products/*',
   ],
   robotsTxtOptions: {
     policies: [
       {
         userAgent: '*',
-        disallow: ['/manage', '/manage/*'],
+        disallow: ['/admin/*', '/manage', '/manage/*', '/next/*'],
       },
     ],
     additionalSitemaps: [
       `${SITE_URL}/pages-sitemap.xml`,
+      `${SITE_URL}/posts-sitemap.xml`,
       `${SITE_URL}/products-sitemap.xml`,
     ],
   },

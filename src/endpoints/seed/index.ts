@@ -8,6 +8,7 @@ import { homePageGlobal } from './home'
 import { ourStory as ourStoryPageData } from './our-story'
 import { localAsset } from './localAsset'
 import { openversePhoto } from './openversePhoto'
+import { placeholderImage } from './placeholderImage'
 import {
   cocoPeatBlockMockup,
   vermicompostBagMockup,
@@ -26,6 +27,7 @@ const collections: CollectionSlug[] = [
   'products',
   'form-submissions',
   'forms',
+  'search',
 ]
 
 const globals = ['header', 'footer'] as const satisfies GlobalSlug[]
@@ -212,16 +214,18 @@ export const seed = async ({
   // not a stock-photo stand-in, so it's read from disk rather than searched.
   media.backgroundImageDoc = await payload.create({
     collection: 'media',
-    data: { alt: 'Hands holding rich compost soil with worms, healthy crop rows and harvest basket at golden hour' },
-    file: localAsset('hero-farm-panorama.png'),
+    data: { alt: 'Hands holding soil and worms, crop rows and a harvest basket' },
+    file: localAsset('hero-crop-field.webp'),
     overrideAccess: true,
   })
 
-  // Use the same wide panoramic photo cropped to the left panel (hands + compost)
+  // Stock search for "hands holding worm-rich compost" kept surfacing
+  // unrelated photos of strangers (a documentary photo of two people with
+  // compost bags, etc.) — a clean abstract placeholder beats a wrong photo.
   media.circleImageDoc = await payload.create({
     collection: 'media',
-    data: { alt: 'Close-up of hands holding nutrient-rich vermicompost soil with earthworms' },
-    file: localAsset('hero-farm-panorama.png'),
+    data: { alt: 'Placeholder — replace with a photo of hands holding soil' },
+    file: await placeholderImage({ label: 'Hands Holding Soil' }),
     overrideAccess: true,
   })
   media.step3ImageDoc = await payload.create({
