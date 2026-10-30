@@ -24,7 +24,6 @@ const LINKS = [
   { href: '/manage/home', label: 'Home page', icon: Home },
   { href: '/manage/our-story', label: 'Our Story page', icon: BookOpen },
   { href: '/manage/products', label: 'Products', icon: Package },
-  { href: '/manage/resources', label: 'Resources', icon: FileText },
   { href: '/manage/messages', label: 'Messages', icon: MessageSquare },
 ]
 

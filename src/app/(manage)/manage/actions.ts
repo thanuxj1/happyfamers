@@ -493,57 +493,6 @@ export async function changeOwnPassword(formData: FormData) {
   })
 }
 
-export async function saveResource(id: string | null, formData: FormData) {
-  const { payload, user } = await getManagePayload()
-
-  const title = String(formData.get('title') || '')
-  const summary = String(formData.get('summary') || '')
-  const categoryId = String(formData.get('category') || '')
-  const publish = formData.get('publish') === 'on'
-  const body = String(formData.get('content') || '').trim()
-
-  // Posts require a body; without this the save fails as "Content > Content",
-  // which means nothing to whoever is writing the article.
-  if (!body) throw new Error('Please write the article before saving.')
-
-  const data: Record<string, unknown> = {
-    title,
-    slug: slugify(title),
-    content: textToLexical(body),
-    // The manager has no draft concept: an article is either live or it isn't.
-    _status: publish ? 'published' : 'draft',
-    categories: categoryId ? [Number(categoryId)] : [],
-  }
-
-  const existing = id
-    ? await payload.findByID({ collection: 'posts', id, depth: 1, draft: true })
-    : null
-  data.meta = await seoFrom(payload, user, formData, existing?.meta, summary, `${title} photo`)
-
-  if (publish) data.publishedAt = new Date().toISOString()
-
-  const photo = formData.get('heroImage') as File | null
-  if (photo && photo.size > 0) {
-    data.heroImage = await uploadMedia(payload, user, photo, `${title} photo`)
-  }
-
-  if (id) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await payload.update({ collection: 'posts', id, data: data as any, draft: false, user, overrideAccess: false })
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await payload.create({ collection: 'posts', data: data as any, draft: false, user, overrideAccess: false })
-  }
-
-  revalidatePath('/manage/resources')
-}
-
-export async function deleteResource(id: string) {
-  const { payload, user } = await getManagePayload()
-  await payload.delete({ collection: 'posts', id, user, overrideAccess: false })
-  revalidatePath('/manage/resources')
-}
-
 /**
  * Saves the Our Story page.
  *
