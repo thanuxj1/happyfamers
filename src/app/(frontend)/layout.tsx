@@ -34,7 +34,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <Header />
-          {children}
+          {/* body is a min-height flex column, but nothing inside it grew, so a
+              short page left the footer sitting mid-screen with empty
+              background below it. This takes up the slack. */}
+          <main className="flex-grow">{children}</main>
           <Footer />
         </Providers>
       </body>

@@ -37,7 +37,7 @@ export default async function HomePageRoute() {
     <>
       <HomeHero data={homePage} />
 
-      <main className="relative z-10 bg-[#f7f5f0] pb-6 text-[#2c332d] lg:pb-1.5">
+      <div className="relative z-10 bg-[#f7f5f0] pb-6 text-[#2c332d] lg:pb-1.5">
         <div className="mx-auto w-full max-w-[1536px] px-4 sm:px-5">
 
           {/* ════════════════════════════════════════
@@ -81,7 +81,7 @@ export default async function HomePageRoute() {
           </div>
 
         </div>
-      </main>
+      </div>
     </>
   )
 }
