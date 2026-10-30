@@ -4,7 +4,7 @@ import { getServerSideURL } from './getURL'
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
   description:
-    'Organic vermicompost, vermiwash and coco peat manufactured in Karnataka, India. EU-certified organic soil and crop inputs for healthier farms.',
+    'Organic vermicompost, vermiwash and coco peat made in Peradeniya, Sri Lanka. EU-certified organic soil and crop inputs for healthier farms.',
   images: [
     {
       url: `${getServerSideURL()}/og-happy-farmers.jpg`,
@@ -13,7 +13,7 @@ const defaultOpenGraph: Metadata['openGraph'] = {
       alt: 'Happy Farmers — Healthy Soil. Healthy Harvest.',
     },
   ],
-  locale: 'en_IN',
+  locale: 'en_LK',
   siteName: 'Happy Farmers',
   title: 'Happy Farmers | Healthy Soil. Healthy Harvest.',
 }

@@ -32,13 +32,16 @@ if (docs.length === 0) {
 console.log('About to delete these articles:')
 for (const doc of docs) console.log(`  - ${doc.title || '(untitled)'}  /posts/${doc.slug ?? ''}`)
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-const answer = await rl.question('\nType "yes" to delete them permanently: ')
-rl.close()
+// --yes skips the prompt, for running this where nothing can answer it.
+if (!process.argv.includes('--yes')) {
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+  const answer = await rl.question('\nType "yes" to delete them permanently: ')
+  rl.close()
 
-if (answer.trim().toLowerCase() !== 'yes') {
-  console.log('Cancelled. Nothing was deleted.')
-  process.exit(0)
+  if (answer.trim().toLowerCase() !== 'yes') {
+    console.log('Cancelled. Nothing was deleted.')
+    process.exit(0)
+  }
 }
 
 for (const doc of docs) {

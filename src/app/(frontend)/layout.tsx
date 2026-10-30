@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     template: '%s | Happy Farmers',
   },
   description:
-    'EU-certified organic vermicompost, vermiwash and coco peat manufactured in Karnataka, India. Better soil, better crops, better tomorrow.',
+    'EU-certified organic vermicompost, vermiwash and coco peat made in Peradeniya, Sri Lanka. Better soil, better crops, better tomorrow.',
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',

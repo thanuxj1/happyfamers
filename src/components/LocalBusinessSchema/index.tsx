@@ -17,13 +17,15 @@ export async function LocalBusinessSchema() {
       'Manufacturer of EU-certified organic vermicompost, vermiwash and coco peat for healthier soil and higher crop yields.',
     address: {
       '@type': 'PostalAddress',
-      addressRegion: 'Karnataka',
-      addressCountry: 'IN',
+      streetAddress: 'No. 547, Old Gampola Road',
+      addressLocality: 'Peradeniya',
+      addressRegion: 'Central Province',
+      addressCountry: 'LK',
     },
     // Sourced from the Home Page global's Contact tab so this schema never
     // drifts from what's shown on the page itself.
-    telephone: homePage?.phone || '+91-98765-43210',
-    email: homePage?.email || 'info@happyfarmers.in',
+    telephone: homePage?.phone || '+94 70 6 235 245',
+    email: homePage?.email || 'info@happyfarmerslk.com',
     sameAs: [],
   }
 
