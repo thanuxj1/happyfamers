@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import React from 'react'
-import { Play, Sparkle } from 'lucide-react'
+import { Sparkle } from 'lucide-react'
 
 import type { HomePage, Media as MediaType } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 import { LeafMark } from './SectionHeading'
+import { HeroWormsPanel, VideoDialog, WatchVideoButton } from './HeroVideo'
 
 const STATIC_HERO = '/hero-farm-panorama.png'
 
@@ -40,6 +41,9 @@ export const HomeHero: React.FC<{ data: HomePage }> = ({ data }) => {
           sizes="100vw"
         />
       )}
+
+      {/* The farm's own footage of a hand full of worms, over the photo's hands. */}
+      <HeroWormsPanel />
 
       {/* Keeps the copy legible where it crosses the brighter part of the field. */}
       <div
@@ -83,18 +87,12 @@ export const HomeHero: React.FC<{ data: HomePage }> = ({ data }) => {
               {primaryCtaLabel}
               <LeafMark className="h-4 w-4 text-brand-light-lime" />
             </Link>
-            <Link
-              className="flex items-center gap-2 rounded-full border border-white/40 bg-black/60 px-5 py-3 text-[14px] font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/75"
-              href="#process"
-            >
-              {secondaryCtaLabel}
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-black">
-                <Play className="h-2.5 w-2.5 fill-current" />
-              </span>
-            </Link>
+            {secondaryCtaLabel && <WatchVideoButton label={secondaryCtaLabel} />}
           </div>
         </div>
       </div>
+
+      <VideoDialog />
 
       {/* Organic wavy divider into the cream section below. */}
       <svg
