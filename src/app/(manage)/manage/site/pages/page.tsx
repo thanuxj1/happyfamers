@@ -7,9 +7,9 @@ export default async function ManageArchiveSettingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Products &amp; Resources pages</h1>
+      <h1 className="text-2xl font-bold">Products page</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        The heading and intro text at the top of the /products and /posts (Resources) listing pages.
+        The heading and intro text at the top of the Products page.
       </p>
       <div className="mt-6">
         <ArchiveSettingsForm

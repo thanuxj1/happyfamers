@@ -24,17 +24,15 @@ const LINKS = [
   { href: '/manage/home', label: 'Home page', icon: Home },
   { href: '/manage/our-story', label: 'Our Story page', icon: BookOpen },
   { href: '/manage/products', label: 'Products', icon: Package },
-  { href: '/manage/resources', label: 'Resources', icon: FileText },
   { href: '/manage/messages', label: 'Messages', icon: MessageSquare },
 ]
 
 const SITE_LINKS = [
   { href: '/manage/pages', label: 'Pages', icon: FileText },
-  { href: '/manage/categories', label: 'Topics', icon: ListTree },
   { href: '/manage/site/header', label: 'Header', icon: Navigation },
   { href: '/manage/site/footer', label: 'Footer', icon: PanelBottom },
   { href: '/manage/people', label: 'People', icon: Users },
-  { href: '/manage/site/pages', label: 'Products & Resources pages', icon: ListTree },
+  { href: '/manage/site/pages', label: 'Products page', icon: ListTree },
 ]
 
 function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
