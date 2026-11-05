@@ -1,9 +1,10 @@
 import { getManagePayload } from '@/utilities/getManagePayload'
+import { navItemsForEditor } from '../../_lib/navLinks'
 import { FooterForm } from '../../_components/FooterForm'
 
 export default async function ManageFooterPage() {
   const { payload } = await getManagePayload()
-  const footer = await payload.findGlobal({ slug: 'footer' })
+  const footer = await payload.findGlobal({ slug: 'footer', depth: 1 })
 
   return (
     <div>
@@ -12,7 +13,7 @@ export default async function ManageFooterPage() {
       <div className="mt-6 rounded-2xl border border-border bg-white p-6 shadow-sm">
         <FooterForm
           companyName={footer.companyName ?? ''}
-          navItems={footer.navItems ?? []}
+          navItems={navItemsForEditor(footer.navItems)}
           trustBadges={footer.trustBadges ?? []}
         />
       </div>

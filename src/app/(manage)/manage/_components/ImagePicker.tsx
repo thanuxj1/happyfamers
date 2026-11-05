@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ImagePlus, X } from 'lucide-react'
 
 export function ImagePicker({
@@ -12,12 +12,23 @@ export function ImagePicker({
   label: string
   currentUrl?: string | null
 }) {
-  const [preview, setPreview] = useState<string | null>(currentUrl ?? null)
+  // `picked` is a new photo chosen here but not saved yet. Without one, the
+  // preview shows the photo the website uses now.
+  const [picked, setPicked] = useState<string | null>(null)
   const [dragOver, setDragOver] = useState(false)
+  const input = useRef<HTMLInputElement>(null)
+  const preview = picked ?? currentUrl ?? null
 
   function handleFile(file: File | undefined) {
     if (!file) return
-    setPreview(URL.createObjectURL(file))
+    setPicked(URL.createObjectURL(file))
+  }
+
+  // Undo a pick. The file input has to be emptied too, or the form would
+  // still upload the photo on save.
+  function undoPick() {
+    if (input.current) input.current.value = ''
+    setPicked(null)
   }
 
   return (
@@ -34,11 +45,10 @@ export function ImagePicker({
           setDragOver(false)
           const file = e.dataTransfer.files?.[0]
           handleFile(file)
-          const input = e.currentTarget.querySelector('input[type="file"]') as HTMLInputElement | null
-          if (input && file) {
+          if (input.current && file) {
             const dt = new DataTransfer()
             dt.items.add(file)
-            input.files = dt.files
+            input.current.files = dt.files
           }
         }}
         className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-6 text-sm text-muted-foreground transition ${
@@ -62,6 +72,7 @@ export function ImagePicker({
           </>
         )}
         <input
+          ref={input}
           type="file"
           name={name}
           accept="image/jpeg,image/png,image/webp,image/gif"
@@ -69,13 +80,13 @@ export function ImagePicker({
           onChange={(e) => handleFile(e.target.files?.[0])}
         />
       </label>
-      {preview && (
+      {picked && (
         <button
           type="button"
-          onClick={() => setPreview(null)}
+          onClick={undoPick}
           className="mt-2 flex items-center gap-1 text-xs font-medium text-destructive hover:underline"
         >
-          <X size={12} /> Clear selection
+          <X size={12} /> {currentUrl ? 'Keep the current photo' : 'Remove this photo'}
         </button>
       )}
     </div>

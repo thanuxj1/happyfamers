@@ -114,7 +114,13 @@ export function OurStoryForm({ data, siteUrl }: { data: OurStoryData; siteUrl: s
         />
         <Text name="heroSubtext" label="Introduction" rows={3} defaultValue={data.heroSubtext} />
         <Text name="heroButtonLabel" label="Button text" defaultValue={data.heroButtonLabel} />
-        <ImagePicker name="heroImage" label="Background photo" currentUrl={urlOf(data.heroImage)} />
+        {/* Until a photo is uploaded the page uses a built-in one; show that
+            rather than an empty slot, so nobody thinks the photo is missing. */}
+        <ImagePicker
+          name="heroImage"
+          label="Background photo"
+          currentUrl={urlOf(data.heroImage) ?? '/hero-farm-panorama.png'}
+        />
       </Section>
 
       <Section title="The story" hint="The text and photo in the middle of the page.">
@@ -135,7 +141,11 @@ export function OurStoryForm({ data, siteUrl }: { data: OurStoryData; siteUrl: s
             defaultValue={paragraph.text}
           />
         ))}
-        <ImagePicker name="storyImage" label="Photo beside the story" currentUrl={urlOf(data.storyImage)} />
+        <ImagePicker
+          name="storyImage"
+          label="Photo beside the story"
+          currentUrl={urlOf(data.storyImage) ?? '/our-story-soil.jpg'}
+        />
       </Section>
 
       <Section title="Highlights" hint="The four short points in the cream strip.">
@@ -155,7 +165,11 @@ export function OurStoryForm({ data, siteUrl }: { data: OurStoryData; siteUrl: s
         <Text name="closingHeading" label="Heading" defaultValue={data.closingHeading} />
         <Text name="closingSubtext" label="Line under the heading" rows={2} defaultValue={data.closingSubtext} />
         <Text name="closingButtonLabel" label="Button text" defaultValue={data.closingButtonLabel} />
-        <ImagePicker name="closingImage" label="Background photo" currentUrl={urlOf(data.closingImage)} />
+        <ImagePicker
+          name="closingImage"
+          label="Background photo"
+          currentUrl={urlOf(data.closingImage) ?? '/hero-farm-panorama.png'}
+        />
       </Section>
 
       <SeoFields
