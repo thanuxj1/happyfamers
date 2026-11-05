@@ -49,7 +49,7 @@ export function HeroWormsPanel() {
       // the way across). Its right edge fades into the same dark tint that sits
       // behind the heading, rather than to transparent, so none of the photo's
       // hands show through.
-      className="group absolute inset-y-0 left-0 z-[5] hidden w-[26%] overflow-hidden md:block"
+      className="absolute inset-y-0 cursor-pointer left-0 z-[5] hidden w-[26%] overflow-hidden md:block"
       // A short fade on the very edge softens the seam between video and photo.
       style={{
         maskImage: 'linear-gradient(to right, #000 86%, transparent)',
@@ -77,14 +77,6 @@ export function HeroWormsPanel() {
             'linear-gradient(to right, rgba(8,16,9,0) 50%, rgba(8,16,9,0.65) 80%, rgba(8,16,9,0.8) 100%)',
         }}
       />
-      <span
-        style={{ left: 20 }}
-        className="absolute bottom-12 flex items-center gap-2 whitespace-nowrap rounded-full bg-black/55 py-1.5 pl-1.5 pr-3.5 text-[12px] font-semibold text-white backdrop-blur-sm transition-colors group-hover:bg-black/75">
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black">
-          <Play className="h-3 w-3 translate-x-px fill-current" />
-        </span>
-        Watch video
-      </span>
     </button>
   )
 }
