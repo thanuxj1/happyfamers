@@ -59,7 +59,9 @@ export const HomeHero: React.FC<{ data: HomePage }> = ({ data }) => {
             on narrow screens the photo is cropped tighter so it starts inset. */}
         <div className="flex min-h-[348px] flex-col justify-center gap-2.5 px-5 py-8 sm:py-6 md:pl-[calc(22%+30px)] md:pr-6">
           {badgeText && (
-            <div className="flex items-center gap-2 text-[13px] font-medium uppercase tracking-[0.12em] text-zinc-100">
+            // On phones this line reaches the top-right corner, where the EU
+            // Organic Certified ribbon sits; the right padding wraps it first.
+            <div className="flex items-center gap-2 pr-20 text-[13px] font-medium uppercase tracking-[0.12em] text-zinc-100 sm:pr-0">
               <Sparkle className="h-4 w-4 fill-brand-light-lime text-brand-light-lime" />
               {badgeText}
             </div>

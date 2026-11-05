@@ -32,7 +32,6 @@ export const OurStoryPage: GlobalConfig = {
         {
           label: 'Hero',
           fields: [
-            { name: 'ribbonText', type: 'text', label: 'Gold corner ribbon' },
             { name: 'heroEyebrow', type: 'text', label: 'Small line above the headline' },
             { name: 'headingLine1', type: 'text', label: 'Headline — first line' },
             {

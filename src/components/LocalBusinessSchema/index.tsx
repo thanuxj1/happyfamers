@@ -15,9 +15,10 @@ export async function LocalBusinessSchema() {
     logo: `${url}/favicon.svg`,
     description:
       'Manufacturer of EU-certified organic vermicompost, vermiwash and coco peat for healthier soil and higher crop yields.',
+    // Town and country only, matching what the site shows: the client asked
+    // for the street address to come off.
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'No. 547, Old Gampola Road',
       addressLocality: 'Peradeniya',
       addressRegion: 'Central Province',
       addressCountry: 'LK',

@@ -109,6 +109,7 @@ export interface Config {
     header: Header;
     footer: Footer;
     'home-page': HomePage;
+    'home-showcase': HomeShowcase;
     'our-story-page': OurStoryPage;
     'archive-settings': ArchiveSetting;
   };
@@ -116,6 +117,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'home-showcase': HomeShowcaseSelect<false> | HomeShowcaseSelect<true>;
     'our-story-page': OurStoryPageSelect<false> | OurStoryPageSelect<true>;
     'archive-settings': ArchiveSettingsSelect<false> | ArchiveSettingsSelect<true>;
   };
@@ -1916,6 +1918,21 @@ export interface HomePage {
   createdAt?: string | null;
 }
 /**
+ * The two photos under the 3-step process on the home page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-showcase".
+ */
+export interface HomeShowcase {
+  id: number;
+  image1?: (number | null) | Media;
+  label1?: string | null;
+  image2?: (number | null) | Media;
+  label2?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * Everything on the Our Story page — headline, photos, story, mission and vision.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1923,7 +1940,6 @@ export interface HomePage {
  */
 export interface OurStoryPage {
   id: number;
-  ribbonText?: string | null;
   heroEyebrow?: string | null;
   headingLine1?: string | null;
   /**
@@ -2140,10 +2156,22 @@ export interface HomePageSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-showcase_select".
+ */
+export interface HomeShowcaseSelect<T extends boolean = true> {
+  image1?: T;
+  label1?: T;
+  image2?: T;
+  label2?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "our-story-page_select".
  */
 export interface OurStoryPageSelect<T extends boolean = true> {
-  ribbonText?: T;
   heroEyebrow?: T;
   headingLine1?: T;
   headingLine2?: T;

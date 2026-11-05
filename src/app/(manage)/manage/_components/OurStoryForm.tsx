@@ -10,7 +10,6 @@ import { UnsavedChangesGuard } from './UnsavedChangesGuard'
 type Upload = { url?: string | null } | string | number | null | undefined
 
 export type OurStoryData = {
-  ribbonText?: string | null
   heroEyebrow?: string | null
   headingLine1?: string | null
   headingLine2?: string | null
@@ -105,7 +104,6 @@ export function OurStoryForm({ data, siteUrl }: { data: OurStoryData; siteUrl: s
       <UnsavedChangesGuard />
 
       <Section title="Top of the page" hint="The large headline and photo visitors see first.">
-        <Text name="ribbonText" label="Gold corner ribbon" defaultValue={data.ribbonText} />
         <Text name="heroEyebrow" label="Small line above the headline" defaultValue={data.heroEyebrow} />
         <Text name="headingLine1" label="Headline — first line" defaultValue={data.headingLine1} />
         <Text

@@ -13,6 +13,7 @@ import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
+import { CertifiedRibbon } from '@/components/CertifiedRibbon'
 
 // Deliberately not async and free of dynamic APIs: awaiting draftMode() here
 // opted every page into dynamic rendering, so nothing could be cached however
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <Header />
+          <CertifiedRibbon />
           {/* body is a min-height flex column, but nothing inside it grew, so a
               short page left the footer sitting mid-screen with empty
               background below it. This takes up the slack. */}

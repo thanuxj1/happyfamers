@@ -100,7 +100,7 @@ export const homePageGlobal: (args: HomePageArgs) => Partial<HomePage> = ({
     contactSubtext: "Have questions or need bulk orders? We're here to help you grow.",
     contactForm: contactForm.id,
     phone: '+91 98765 43210',
-    email: 'info@happyfarmers.in',
+    email: 'info@happyfarmerslk.com',
     location: 'Karnataka, India',
     workingHours: 'Mon - Sat: 9:00 AM - 6:00 PM',
     infoStripImage: infoStripImage.id,

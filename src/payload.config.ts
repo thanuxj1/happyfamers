@@ -16,6 +16,7 @@ import { Header } from './Header/config'
 import { ArchiveSettings } from './globals/ArchiveSettings/config'
 import { HomePage } from './globals/HomePage/config'
 import { OurStoryPage } from './globals/OurStoryPage/config'
+import { HomeShowcase } from './globals/HomeShowcase/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -91,7 +92,7 @@ export default buildConfig({
     Users,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, HomePage, OurStoryPage, ArchiveSettings],
+  globals: [Header, Footer, HomePage, HomeShowcase, OurStoryPage, ArchiveSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

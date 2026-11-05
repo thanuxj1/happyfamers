@@ -38,7 +38,7 @@ export const contact: (args: ContactArgs) => RequiredDataFromCollectionSlug<'pag
             size: 'oneThird',
             richText: richText([
               heading('Email Us', 'h3'),
-              paragraph('info@happyfarmers.in'),
+              paragraph('info@happyfarmerslk.com'),
             ]),
           },
           {

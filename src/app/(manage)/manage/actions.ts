@@ -345,6 +345,25 @@ export async function saveHomePage(formData: FormData) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await payload.updateGlobal({ slug: 'home-page', data: data as any, user, overrideAccess: false })
+
+  // The photos under the steps live in their own global. The form only shows
+  // that section once its table exists, so its absence here means "leave it".
+  if (formData.has('showcaseLabel1')) {
+    const showcase = await payload.findGlobal({ slug: 'home-showcase', depth: 0 })
+    await payload.updateGlobal({
+      slug: 'home-showcase',
+      data: {
+        image1: await resolveImage(payload, user, formData, 'showcaseImage1', showcase.image1, 'Home page photo'),
+        label1: text('showcaseLabel1').trim(),
+        image2: await resolveImage(payload, user, formData, 'showcaseImage2', showcase.image2, 'Home page photo'),
+        label2: text('showcaseLabel2').trim(),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any,
+      user,
+      overrideAccess: false,
+    })
+  }
+
   revalidatePath('/manage/home')
   revalidatePath('/')
 }
@@ -560,7 +579,6 @@ export async function saveOurStoryPage(formData: FormData) {
   const rows = (name: string) => formData.getAll(name).map((value) => String(value).replace(/\r\n?/g, '\n'))
 
   const data: Record<string, unknown> = {
-    ribbonText: text('ribbonText'),
     heroEyebrow: text('heroEyebrow'),
     headingLine1: text('headingLine1'),
     headingLine2: text('headingLine2'),

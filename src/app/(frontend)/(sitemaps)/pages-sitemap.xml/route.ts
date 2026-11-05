@@ -32,14 +32,12 @@ const getPagesSitemap = async () => {
 
   // The home page is a global rendered by app/(frontend)/page.tsx rather than a
   // `pages` document, so it has to be listed explicitly. `/search` is left out
-  // deliberately — search result pages are not worth indexing.
+  // deliberately — search result pages are not worth indexing. So is
+  // `/posts`: Resources was taken out of the navigation, and a page the site no
+  // longer links to should not be advertised to search engines either.
   const defaultSitemap = [
     {
       loc: `${SITE_URL}/`,
-      lastmod: dateFallback,
-    },
-    {
-      loc: `${SITE_URL}/posts`,
       lastmod: dateFallback,
     },
     {

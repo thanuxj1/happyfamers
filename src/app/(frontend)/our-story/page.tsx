@@ -52,14 +52,8 @@ export default async function OurStoryPage() {
           }}
         />
 
-        {content.ribbonText && (
-          <div
-            className="pointer-events-none absolute -right-[86px] top-[52px] hidden rotate-[39deg] px-[88px] py-4 text-center text-[15px] font-bold text-[#064b25] shadow-md sm:block"
-            style={{ background: GOLD }}
-          >
-            {content.ribbonText}
-          </div>
-        )}
+        {/* The gold "EU Organic Certified" ribbon that used to sit here is now
+            on every page — see CertifiedRibbon in the root layout. */}
 
         <div className="container relative z-10 max-w-[1536px] py-20 md:py-24">
           {content.heroEyebrow && (

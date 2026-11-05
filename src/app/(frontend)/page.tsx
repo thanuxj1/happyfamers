@@ -15,6 +15,8 @@ import { ImpactGrid } from '@/components/home/ImpactGrid'
 import { CertificationCard } from '@/components/home/CertificationCard'
 import { ContactFormBox } from '@/components/home/ContactFormBox'
 import { ContactInfoBox } from '@/components/home/ContactInfoBox'
+import { PlantShowcase } from '@/components/home/PlantShowcase'
+import { getHomeShowcase } from '@/globals/HomeShowcase/content'
 
 // Cached like the other pages; Payload revalidates this path when content is
 // saved, so edits still appear immediately.
@@ -23,6 +25,7 @@ export const revalidate = 600
 export default async function HomePageRoute() {
   const homePage = await getCachedGlobal('home-page', 2)()
   const payload = await getPayload({ config: configPromise })
+  const showcase = await getHomeShowcase()
 
   const { docs: products } = await payload.find({
     collection: 'products',
@@ -46,8 +49,11 @@ export default async function HomePageRoute() {
               the columns stack so nothing is squeezed.
               ════════════════════════════════════════ */}
           <div className="flex flex-col gap-6 lg:flex-row lg:gap-4">
-            <div className="lg:flex-[9]">
+            {/* A column so the photos can grow into the space left under the
+                steps, which are shorter than the products beside them. */}
+            <div className="flex flex-col lg:flex-[9]">
               <ProcessSteps data={homePage} />
+              <PlantShowcase tiles={showcase.tiles} />
             </div>
             <div className="lg:flex-[10]">
               <ProductsPreview data={homePage} products={products} />

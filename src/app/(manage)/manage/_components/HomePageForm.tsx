@@ -79,7 +79,20 @@ function Text({
   )
 }
 
-export function HomePageForm({ data, siteUrl }: { data: HomePageData; siteUrl: string }) {
+/** The two photos under the steps. Null until their table exists. */
+export type ShowcaseFormData = {
+  tiles: { url: string | null; label: string }[]
+} | null
+
+export function HomePageForm({
+  data,
+  siteUrl,
+  showcase,
+}: {
+  data: HomePageData
+  siteUrl: string
+  showcase: ShowcaseFormData
+}) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -134,6 +147,25 @@ export function HomePageForm({ data, siteUrl }: { data: HomePageData; siteUrl: s
           </div>
         ))}
       </Section>
+
+      {showcase && (
+        <Section
+          title="Photos under the steps"
+          hint="The two photos beneath the three steps. Leave a label empty to show the photo without one."
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            {showcase.tiles.map((tile, i) => (
+              <div key={i} className="space-y-4 rounded-xl border border-border p-4">
+                <p className="text-sm font-semibold text-muted-foreground">
+                  {i === 0 ? 'Left photo' : 'Right photo'}
+                </p>
+                <ImagePicker name={`showcaseImage${i + 1}`} label="Photo" currentUrl={tile.url} />
+                <Text name={`showcaseLabel${i + 1}`} label="Label" defaultValue={tile.label} />
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
 
       <Section title="Products section" hint="The products themselves are edited under Products.">
         <Text name="productsHeading" label="Section heading" defaultValue={data.productsHeading} />

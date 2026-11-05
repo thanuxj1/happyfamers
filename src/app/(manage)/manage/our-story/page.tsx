@@ -15,7 +15,6 @@ export default async function ManageOurStoryPage() {
   ])
 
   const data = {
-    ribbonText: content.ribbonText,
     heroEyebrow: content.heroEyebrow,
     headingLine1: content.headingLine1,
     headingLine2: content.headingLine2,

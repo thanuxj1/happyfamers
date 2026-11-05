@@ -34,7 +34,7 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
   confirmationType: 'message',
   emails: [
     {
-      emailFrom: '"Happy Farmers" <info@happyfarmers.in>',
+      emailFrom: '"Happy Farmers" <info@happyfarmerslk.com>',
       emailTo: '{{email}}',
       message: {
         root: {
@@ -67,7 +67,7 @@ export const contactForm: RequiredDataFromCollectionSlug<'forms'> = {
           version: 1,
         },
       },
-      subject: "You've received a new message from happyfarmers.in",
+      subject: "You've received a new message from Happy Farmers",
     },
   ],
   fields: [

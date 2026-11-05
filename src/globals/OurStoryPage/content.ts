@@ -8,7 +8,6 @@ import { cache } from 'react'
  * headline, and the manager can show the real copy as its starting point.
  */
 export const OUR_STORY_DEFAULTS = {
-  ribbonText: 'EU Organic Certified',
   heroEyebrow: 'OUR STORY',
   headingLine1: 'BLACK',
   headingLine2: 'GOLD',
@@ -94,7 +93,6 @@ export const getOurStoryContent = cache(async () => {
   const highlights = listFrom(g.highlights as { text?: string | null }[] | null)
 
   return {
-    ribbonText: clean(g.ribbonText) ?? OUR_STORY_DEFAULTS.ribbonText,
     heroEyebrow: clean(g.heroEyebrow) ?? OUR_STORY_DEFAULTS.heroEyebrow,
     headingLine1: clean(g.headingLine1) ?? OUR_STORY_DEFAULTS.headingLine1,
     headingLine2: clean(g.headingLine2) ?? OUR_STORY_DEFAULTS.headingLine2,

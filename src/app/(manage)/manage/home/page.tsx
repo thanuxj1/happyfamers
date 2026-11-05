@@ -1,10 +1,14 @@
 import { getServerSideURL } from '@/utilities/getURL'
 import { getManagePayload } from '@/utilities/getManagePayload'
 import { HomePageForm } from '../_components/HomePageForm'
+import { getHomeShowcase } from '@/globals/HomeShowcase/content'
 
 export default async function ManageHomePage() {
   const { payload } = await getManagePayload()
-  const data = await payload.findGlobal({ slug: 'home-page', depth: 1 })
+  const [data, showcase] = await Promise.all([
+    payload.findGlobal({ slug: 'home-page', depth: 1 }),
+    getHomeShowcase(),
+  ])
 
   return (
     <div>
@@ -13,7 +17,20 @@ export default async function ManageHomePage() {
         Everything on the front page of the website, top to bottom.
       </p>
       <div className="mt-6">
-        <HomePageForm data={data} siteUrl={getServerSideURL()} />
+        <HomePageForm
+          data={data}
+          siteUrl={getServerSideURL()}
+          showcase={
+            showcase.available
+              ? {
+                  tiles: showcase.tiles.map((tile) => ({
+                    url: tile.media?.url ?? tile.src,
+                    label: tile.label,
+                  })),
+                }
+              : null
+          }
+        />
       </div>
     </div>
   )
