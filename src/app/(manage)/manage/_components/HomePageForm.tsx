@@ -129,10 +129,21 @@ export function HomePageForm({
           defaultValue={data.headingAccent}
         />
         <Text name="subtext" label="Introduction" rows={3} defaultValue={data.subtext} />
-        <ImagePicker name="backgroundImage" label="Main photo" currentUrl={urlOf(data.backgroundImage)} />
+        <div className="space-y-2">
+          <ImagePicker name="backgroundImage" label="Main photo" currentUrl={urlOf(data.backgroundImage)} />
+          <p className="text-sm text-muted-foreground">
+            On computers and tablets, the left quarter of this photo is covered by the looping
+            video of a hand full of worms, so keep anything important away from the left edge.
+          </p>
+        </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Text name="primaryCtaLabel" label="Green button text" defaultValue={data.primaryCtaLabel} />
-          <Text name="secondaryCtaLabel" label="Outlined button text" defaultValue={data.secondaryCtaLabel} />
+          <Text name="primaryCtaLabel" label="Green button text" hint="Opens the Contact page." defaultValue={data.primaryCtaLabel} />
+          <Text
+            name="secondaryCtaLabel"
+            label="Outlined button text"
+            hint="Plays the farm video, with sound."
+            defaultValue={data.secondaryCtaLabel}
+          />
         </div>
       </Section>
 
