@@ -7,6 +7,7 @@ import {
   Navigation,
   Package,
   PanelBottom,
+  Share2,
 } from 'lucide-react'
 import { getManagePayload } from '@/utilities/getManagePayload'
 
@@ -20,6 +21,7 @@ const CARDS = [
   { href: '/manage/pages', label: 'Pages', description: 'Contact and Organic Certification', icon: FileText },
   { href: '/manage/site/header', label: 'Header', description: 'Top menu & button', icon: Navigation },
   { href: '/manage/site/footer', label: 'Footer', description: 'Bottom links & badges', icon: PanelBottom },
+  { href: '/manage/site/social', label: 'Social media', description: 'Facebook, Instagram and more', icon: Share2 },
 ]
 
 export default async function ManageDashboard() {

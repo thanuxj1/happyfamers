@@ -110,6 +110,7 @@ export interface Config {
     footer: Footer;
     'home-page': HomePage;
     'home-showcase': HomeShowcase;
+    'social-links': SocialLink;
     'our-story-page': OurStoryPage;
     'archive-settings': ArchiveSetting;
   };
@@ -118,6 +119,7 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'home-showcase': HomeShowcaseSelect<false> | HomeShowcaseSelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
     'our-story-page': OurStoryPageSelect<false> | OurStoryPageSelect<true>;
     'archive-settings': ArchiveSettingsSelect<false> | ArchiveSettingsSelect<true>;
   };
@@ -1933,6 +1935,24 @@ export interface HomeShowcase {
   createdAt?: string | null;
 }
 /**
+ * Links shown in the footer and on the Contact page. Leave one empty to hide it.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLink {
+  id: number;
+  facebook?: string | null;
+  instagram?: string | null;
+  whatsapp?: string | null;
+  linkedin?: string | null;
+  x?: string | null;
+  youtube?: string | null;
+  pinterest?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * Everything on the Our Story page — headline, photos, story, mission and vision.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2163,6 +2183,22 @@ export interface HomeShowcaseSelect<T extends boolean = true> {
   label1?: T;
   image2?: T;
   label2?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  facebook?: T;
+  instagram?: T;
+  whatsapp?: T;
+  linkedin?: T;
+  x?: T;
+  youtube?: T;
+  pinterest?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

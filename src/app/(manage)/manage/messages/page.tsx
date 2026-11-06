@@ -1,5 +1,10 @@
 import { getManagePayload } from '@/utilities/getManagePayload'
 
+const FIELD_LABELS: Record<string, string> = {
+  'full-name': 'Name',
+  product: 'Interested in',
+}
+
 export default async function ManageMessagesPage() {
   const { payload } = await getManagePayload()
   const { docs: submissions } = await payload.find({
@@ -29,7 +34,7 @@ export default async function ManageMessagesPage() {
                 <dl className="mt-2 grid gap-1 text-sm">
                   {fields.map((f, i) => (
                     <div key={i} className="flex gap-2">
-                      <dt className="font-medium capitalize text-muted-foreground">{f.field}:</dt>
+                      <dt className="font-medium capitalize text-muted-foreground">{FIELD_LABELS[f.field ?? ''] ?? f.field}:</dt>
                       <dd>{f.value}</dd>
                     </div>
                   ))}

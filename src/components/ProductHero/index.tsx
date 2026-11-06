@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 import type { Product } from '@/payload-types'
 
@@ -32,7 +33,14 @@ export const ProductHero: React.FC<{
             </p>
           )}
 
-          {priceLabel && <p className="text-sm font-medium text-zinc-300 md:text-base">{priceLabel}</p>}
+          {priceLabel && (
+            <Link
+              href={`/contact?product=${product.slug}`}
+              className="inline-block rounded-full bg-brand-accent-green px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-forest-green md:text-base"
+            >
+              {priceLabel}
+            </Link>
+          )}
         </div>
 
         {heroImage && typeof heroImage !== 'string' && (

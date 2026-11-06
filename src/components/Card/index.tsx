@@ -116,7 +116,12 @@ export const Card: React.FC<{
         )}
         {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
         {priceLabel && (
-          <div className="mt-3 text-sm font-medium text-primary">{priceLabel}</div>
+          <Link
+            href={`/contact?product=${slug}`}
+            className="relative z-10 mt-3 inline-block text-sm font-medium text-primary underline underline-offset-2 hover:no-underline"
+          >
+            {priceLabel}
+          </Link>
         )}
       </div>
     </article>

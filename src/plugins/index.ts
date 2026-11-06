@@ -4,6 +4,7 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { Plugin } from 'payload'
+import { notifyContactMessage } from '@/hooks/notifyContactMessage'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -85,6 +86,9 @@ export const plugins: Plugin[] = [
       },
     },
     formSubmissionOverrides: {
+      hooks: {
+        afterChange: [notifyContactMessage],
+      },
       labels: {
         singular: 'Contact Message',
         plural: 'Contact Messages',

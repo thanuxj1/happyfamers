@@ -3,6 +3,8 @@ import { Globe, Heart, Leaf, ShieldCheck, Sprout, Users } from 'lucide-react'
 
 import type { Media as MediaType } from '@/payload-types'
 import { Media } from '@/components/Media'
+import { SocialLinks } from '@/components/SocialLinks'
+import { getSocialLinks } from '@/globals/SocialLinks/content'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
 const badgeIconMap = {
@@ -18,6 +20,7 @@ export async function Footer() {
   const footerData = await getCachedGlobal('footer', 1)()
   const backgroundImage = footerData?.backgroundImage
   const badges = footerData?.trustBadges || []
+  const { links } = await getSocialLinks()
 
   return (
     <footer className="relative overflow-hidden bg-[#2e2114] py-4 text-[#ded6b8] lg:h-[59px] lg:py-0">
@@ -43,6 +46,7 @@ export async function Footer() {
             </div>
           )
         })}
+        <SocialLinks links={links} className="text-[#cfc48f]" />
       </div>
     </footer>
   )

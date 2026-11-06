@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { getManagePayload } from '@/utilities/getManagePayload'
+import { SOCIAL_NETWORKS, socialHref } from '@/globals/SocialLinks/networks'
 import { textToLexical } from './_lib/lexical'
 
 function slugify(text: string): string {
@@ -186,6 +187,22 @@ export async function saveFooter(formData: FormData) {
     overrideAccess: false,
   })
   revalidatePath('/manage/site/footer')
+}
+
+export async function saveSocialLinks(formData: FormData) {
+  const { payload, user } = await getManagePayload()
+
+  const data: Record<string, string> = {}
+  for (const { key, label } of SOCIAL_NETWORKS) {
+    const value = String(formData.get(key) || '').trim()
+    if (value && !socialHref(key, value)) {
+      throw new Error(`The ${label} link doesn't look right. Paste the full address from your browser.`)
+    }
+    data[key] = value
+  }
+
+  await payload.updateGlobal({ slug: 'social-links', data, user, overrideAccess: false })
+  revalidatePath('/manage/site/social')
 }
 
 export async function saveArchiveSettings(formData: FormData) {

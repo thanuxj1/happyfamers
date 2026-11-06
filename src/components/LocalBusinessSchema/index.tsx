@@ -1,11 +1,13 @@
 import React from 'react'
 
+import { getSocialLinks } from '@/globals/SocialLinks/content'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getServerSideURL } from '@/utilities/getURL'
 
 export async function LocalBusinessSchema() {
   const url = getServerSideURL()
   const homePage = await getCachedGlobal('home-page', 0)()
+  const { links } = await getSocialLinks()
 
   const schema = {
     '@context': 'https://schema.org',
@@ -27,7 +29,7 @@ export async function LocalBusinessSchema() {
     // drifts from what's shown on the page itself.
     telephone: homePage?.phone || '+94 70 6 235 245',
     email: homePage?.email || 'info@happyfarmerslk.com',
-    sameAs: [],
+    sameAs: links.map((link) => link.href),
   }
 
   return (

@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Navigation,
   Package,
+  Share2,
   Users,
   PanelBottom,
   X,
@@ -31,6 +32,7 @@ const SITE_LINKS = [
   { href: '/manage/pages', label: 'Pages', icon: FileText },
   { href: '/manage/site/header', label: 'Header', icon: Navigation },
   { href: '/manage/site/footer', label: 'Footer', icon: PanelBottom },
+  { href: '/manage/site/social', label: 'Social media', icon: Share2 },
   { href: '/manage/people', label: 'People', icon: Users },
   { href: '/manage/site/pages', label: 'Products page', icon: ListTree },
 ]
